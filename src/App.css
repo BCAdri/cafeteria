@@ -1,10 +1,10 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body ´{
+body {
   overflow-x: hidden;
 }
 
@@ -13,6 +13,6 @@ body ´{
 }
 
 .App{
-  height:  100vh;
+  height: 100vh;
   background-color: black;
 }
