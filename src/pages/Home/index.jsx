@@ -1,6 +1,14 @@
-const Home = () =>{
+import { Banner } from "../../components/Banner";
+import { About } from "../../components/About";
+import { ProductsPreview } from "../../components/ProductPreview";
+
+const Home = () => {
     return (
-        <div className="text-withe">Home</div>
+        <>
+            <Banner />
+            <ProductsPreview />
+            <About />
+        </>
     )
 }
 
