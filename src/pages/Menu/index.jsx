@@ -7,7 +7,8 @@ import { addToCart } from "../../stores/cart/cartSlice";
 
 const Menu = () => {
     const dispatch = useDispatch();
-    const products = useSelector(selectAllProducts);
+    const products = useSelector(selectAllProducts); 
+    console.log(products.products);
     const [activeTab, setActiveTab] = useState('');
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -21,9 +22,10 @@ const Menu = () => {
 
     const onTabSwitch = (newActiveTab) => {
         setActiveTab(newActiveTab);
-        let categories = products.products.map((product) => product.name.name);
+        //let categories = products.products.map((product) => product.name.name);
+        let categoriesSet = new Set(products.products.map((product) => product.name.name));
+        let categories = Array.from(categoriesSet);
         let index = categories.findIndex(category => newActiveTab === category);
-        console.log(index);
         if (index > -1) {
             setActiveTabIndex(index);
         } else {
@@ -38,9 +40,9 @@ const Menu = () => {
             ) : (
                 <div className="menu-wrapper">
                     {products.products && products.products.length > 0 ? (
-                        <>
+                        <>  
                             <Tabs
-                                list={products.products.map((product) => product.name.name)}
+                                list={Array.from(new Set(products.products.map((product) => product.name.name)))}
                                 activeTab={activeTab}
                                 onTabSwitch={onTabSwitch}
                             />

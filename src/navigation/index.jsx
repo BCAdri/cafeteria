@@ -4,6 +4,7 @@ import { Header } from "../components/Header";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Orders from "../pages/Orders";
 import Menu from "../pages/Menu";
 import Cart from "../pages/Cart";
 import { useSelector } from "react-redux";
@@ -22,6 +23,7 @@ const Navigation = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/orders" element={<Orders />} />
             </Routes>
             <Footer />
         </BrowserRouter>

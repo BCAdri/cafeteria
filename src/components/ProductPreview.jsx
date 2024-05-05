@@ -42,7 +42,7 @@ export const ProductsPreview = () => {
     }
     
     return (
-      <div className="container mx-auto pb-4 w-2/3 text-white bg-black">
+      <div className="container mx-auto pb-4 w-2/3 text-white bg-gray-800">
           {products && products.length > 0 ? (
               <Carousel responsive={responsive}>
                   {products.map((product, index) => (
