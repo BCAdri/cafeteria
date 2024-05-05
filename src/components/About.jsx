@@ -1,4 +1,4 @@
-//import aboutImage from "../assets/images/about-image.png";
+import aboutImage from "../assets/img/cafp.png";
 
 export const About = () => {
 
@@ -18,7 +18,7 @@ export const About = () => {
                     </p>
                 </div>
                 <div className="flex items-center justify-center">
-                    <img src="" alt="" className="w-[400px] h-[400px] object-cover" />
+                    <img src={aboutImage} alt="" className="w-[400px] h-[400px] object-cover" />
                 </div>
             </div>
         </div>

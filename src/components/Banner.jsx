@@ -19,8 +19,8 @@ export const Banner = () => {
             </div>
 
             <div className="banner-image w-full md:w-1/3 p-3 flex justify-end">
-                <img src={require("../assets/img/web.png")} alt="" className="max-h-95"/>
-            </div>
+                <img src={require("../assets/img/cafp.png")} alt="" className="max-h-95"/>
+            </div>.png
         </div>
     )
 }

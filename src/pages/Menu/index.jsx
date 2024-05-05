@@ -13,7 +13,7 @@ const Menu = () => {
 
     useEffect(() => {
         dispatch(fetchProducts())
-    }, [])
+    }, [dispatch])
 
     const onAddProduct = (product) => {
         dispatch(addToCart(product))
@@ -33,31 +33,30 @@ const Menu = () => {
 
     return (
         <div className="bg-white">
-           {
-            products.status !== 'fulfilled' ?
-            <div>loading...</div> :
-            <div className="menu-wrapper">
-                {
-                    products.products &&
-                    <Tabs
-                        list={products.products.map((product) => product.name.name)}
-                        activeTab={activeTab}
-                        onTabSwitch={onTabSwitch}
-                        />
-                }
-                <div className="flex flex-row mx-3">
-                {
-                    products.products && products.products[activeTabIndex].products.map((product, index) => {
-                        return (
-                           <ProductDetailCard key={index} product={product} onAddProduct={onAddProduct}/>
-                        )
-                    })
-                }
+            {products.status !== 'fulfilled' ? (
+                <div>loading...</div>
+            ) : (
+                <div className="menu-wrapper">
+                    {products.products && products.products.length > 0 ? (
+                        <>
+                            <Tabs
+                                list={products.products.map((product) => product.name.name)}
+                                activeTab={activeTab}
+                                onTabSwitch={onTabSwitch}
+                            />
+                            <div className="flex flex-row mx-3">
+                                {products.products[activeTabIndex].products.map((product, index) => (
+                                    <ProductDetailCard key={index} product={product} onAddProduct={onAddProduct}/>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div>No hay productos disponibles</div>
+                    )}
                 </div>
-            </div>
-           }
+            )}
         </div>
-    )
+    );
 }
 
 export default Menu;

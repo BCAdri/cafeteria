@@ -39,7 +39,7 @@ const Register = () => {
         });
         setTimeout(() => {
             navigate("/");
-          }, 2000);      
+          }, 2000);
     })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -55,19 +55,17 @@ const Register = () => {
         }
       });
 
-    fetch("http://localhost:8080/api/create-user", {
+    fetch("http://localhost:8000/api/create-user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: data.email,
         name: data.name,
-        _id: uid,
+        email: data.email
       }),
     })
       .then((response) => {
-        console.log("RESPUESTA:" + response);
         if (response.status === 200) {
           setLoading(false);
           toast.success("Account created successfully!🎉", {
@@ -80,7 +78,11 @@ const Register = () => {
             progress: undefined,
             theme: "dark",
           });
-          navigate("/");
+
+          setTimeout(() => {
+            navigate("/");
+          }, 2000); 
+
         } else {
           console.log(response.json());
         }

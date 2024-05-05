@@ -31,7 +31,7 @@ export const ProductsPreview = () => {
       };
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/products')
+        fetch('http://localhost:8000/api/products')
             .then(response => response.json())
             .then(data => setProducts(data?.data))
             .catch(e => console.log(e))
@@ -42,18 +42,18 @@ export const ProductsPreview = () => {
     }
     
     return (
-        <div className="container mx-auto pb-4 w-2/3 text-white bg-black">
-            <Carousel responsive={responsive}>
-            {
-                products.length > 0 && products.map((product, index) => {
-                    return (
-                        <div className="w-full p-3">
-                            <ProductPreviewCard key={index} product={product} onAddProduct={onAddProduct} />
-                        </div>
-                    )
-                })
-            }
-            </Carousel>
-        </div>
-    )
+      <div className="container mx-auto pb-4 w-2/3 text-white bg-black">
+          {products && products.length > 0 ? (
+              <Carousel responsive={responsive}>
+                  {products.map((product, index) => (
+                      <div className="w-full p-3" key={index}>
+                          <ProductPreviewCard product={product} onAddProduct={onAddProduct} />
+                      </div>
+                  ))}
+              </Carousel>
+          ) : (
+              <div>No hay productos disponibles</div>
+          )}
+      </div>
+  )
 }
