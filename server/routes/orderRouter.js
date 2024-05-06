@@ -37,27 +37,8 @@ router.post("/create-order", async (req, res) => {
   }
 });
 
-// Filtrar órdenes por rango de fechas
-router.get("/filter-orders", async (req, res) => {
-  try {
-    let query = {};
-
-    if (req.query.startDate && req.query.endDate) {
-      query.createdAt = {
-        $gte: new Date(req.query.startDate),
-        $lte: new Date(req.query.endDate),
-      };
-    }
-
-    const orders = await Order.find(query).populate("user", "name email");
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 // Ruta para filtrar órdenes por rango de fechas o obtener una orden por su ID
-router.get("/filter-id-date", async (req, res) => {
+router.get("/filter-orders", async (req, res) => {
     try {
       // Si se proporciona un ID en la URL, obtén la orden por su ID
       if (req.query.id) {

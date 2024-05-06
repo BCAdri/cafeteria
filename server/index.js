@@ -89,7 +89,7 @@ app.use('/api/', productRouter);
 app.use('/api/', userRouter);
 app.use('/api/', orderRouter);
 
-app.post('/create-payment-intent', async(req, res) => {
+/*app.post('/create-payment-intent', async(req, res) => {
     try {
         const { orderItems, shippingAddress, userId } = req.body;
         console.log(shippingAddress);
@@ -118,7 +118,7 @@ app.post('/create-payment-intent', async(req, res) => {
 
         res.send({
             clientSecret: paymentIntent.client_secret
-        })*/
+        })
     } catch(e) {
         res.status(400).json({
             error: {
@@ -126,4 +126,4 @@ app.post('/create-payment-intent', async(req, res) => {
             }
         })
     }
-})
+})*/

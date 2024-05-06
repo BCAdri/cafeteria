@@ -25,7 +25,6 @@ const orderSlice = createSlice({
     },
   },
 });
-
 export const { fetchOrdersStart, fetchOrdersSuccess, fetchOrdersFailure } = orderSlice.actions;
 
 export const fetchOrders = () => async (dispatch) => {
@@ -38,6 +37,16 @@ export const fetchOrders = () => async (dispatch) => {
   }
 };
 
+export const fetchOrdersById = (userId) => async (dispatch) => {
+    dispatch(fetchOrdersStart());
+    try {
+      const response = await axios.get(`/api/orders/get-orders/${userId}`);
+      dispatch(fetchOrdersSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchOrdersFailure(error.message));
+    }
+};
+
 export const createOrder = (orderData) => async (dispatch) => {
   dispatch(fetchOrdersStart());
   try {
@@ -48,14 +57,20 @@ export const createOrder = (orderData) => async (dispatch) => {
   }
 };
 
-export const fetchOrdersByFilter = (startDate, endDate) => async (dispatch) => {
-  dispatch(fetchOrdersStart());
-  try {
-    const response = await axios.get(`/api/orders/filter-orders?startDate=${startDate}&endDate=${endDate}`);
-    dispatch(fetchOrdersSuccess(response.data));
-  } catch (error) {
-    dispatch(fetchOrdersFailure(error.message));
-  }
-};
+export const fetchOrdersByFilter = (startDate, endDate, id) => async (dispatch) => {
+    dispatch(fetchOrdersStart());
+    try {
+      let url = `/api/orders/filter-orders`;
+      if (id && id.trim() !== '') {
+        url += `?id=${id}`;
+      } else {
+        url += `?startDate=${startDate}&endDate=${endDate}`;
+      }
+      const response = await axios.get(url);
+      dispatch(fetchOrdersSuccess(response.data));
+    } catch (error) {
+      dispatch(fetchOrdersFailure(error.message));
+    }
+  };
 
 export default orderSlice.reducer;

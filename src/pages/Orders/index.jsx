@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, fetchOrdersByFilter } from '../../stores/orders/ordersSlice';
+import { fetchOrders, fetchOrdersByFilter, fetchOrdersById } from '../../stores/orders/ordersSlice';
 
 const OrdersComponent = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const isAuthenticated = sessionStorage.getItem('User Id');
 
   useEffect(() => {
-    dispatch(fetchOrders()); 
-  }, [dispatch]);
+    if (isAuthenticated) {
+      dispatch(fetchOrdersById(isAuthenticated));
+    } else {
+      dispatch(fetchOrders());
+    }
+  }, [dispatch, isAuthenticated]);
 
   const handleFilter = () => {
-    dispatch(fetchOrdersByFilter({ startDate, endDate }));
+    dispatch(fetchOrdersByFilter(startDate, endDate, isAuthenticated ));
   };
 
   return (
