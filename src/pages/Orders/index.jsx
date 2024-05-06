@@ -1,37 +1,65 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders, fetchOrdersByFilter } from '../../stores/orders/ordersSlice';
 
-const Orders = () => {
-    const [orders, setOrders] = useState([]);
+const OrdersComponent = () => {
+  const dispatch = useDispatch();
+  const { orders, loading, error } = useSelector((state) => state.orders);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-    /*useEffect(() => {
-        fetchOrders();
-    }, []);*/
+  useEffect(() => {
+    dispatch(fetchOrders()); 
+  }, [dispatch]);
 
-    /*const fetchOrders = async () => {
-        try {
-            const response = await fetch("ruta-a-tu-api/orders");
-            const data = await response.json();
-            setOrders(data.orders); // Suponiendo que tu API devuelve los pedidos en un array llamado "orders"
-        } catch (error) {
-            console.error("Error al recuperar los pedidos:", error);
-        }
-    };*/
+  const handleFilter = () => {
+    dispatch(fetchOrdersByFilter({ startDate, endDate }));
+  };
 
-    return (
-        <div>
-            <h1>Orders</h1>
-            <ul>
-                {orders.map((order, index) => (
-                    <li key={index}>
-                        {/* Aquí renderizas los detalles de cada pedido */}
-                        <p>ID del Pedido: {order.id}</p>
-                        <p>Fecha del Pedido: {order.date}</p>
-                        {/* Otros detalles del pedido */}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    
+    <div style={styles.ordersContainer}>
+      <h2>Orders</h2>
+      <div style={styles.filterContainer}>
+        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+        <button onClick={handleFilter}>Filter</button>
+      </div>
+      {loading && <div>Loading...</div>}
+      {error && <div style={styles.errorMessage}>Error: {error}</div>}
+      <ul style={styles.ordersList}>
+        {orders.map((order, index) => (
+          <li key={index} style={styles.orderItem}>
+            <p>ID del Pedido: {order.id}</p>
+            <p>Fecha del Pedido: {order.date}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default Orders;
+const styles = {
+  ordersContainer: {
+    maxWidth: '800px',
+    margin: '0 auto',
+  },
+  filterContainer: {
+    marginBottom: '20px',
+  },
+  errorMessage: {
+    color: 'red',
+  },
+  ordersList: {
+    listStyleType: 'none',
+    padding: 0,
+  },
+  orderItem: {
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    marginBottom: '10px',
+    padding: '10px',
+  },
+};
+
+export default OrdersComponent;
