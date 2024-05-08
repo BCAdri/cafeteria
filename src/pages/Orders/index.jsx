@@ -1,93 +1,25 @@
-/*import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders, fetchOrdersByFilter, fetchOrdersById } from '../../stores/orders/ordersSlice';
+import { selectAllOrders, fetchOrders, getOrderById, getAllOrders  } from '../../stores/orders/ordersSlice';
+import '../Orders/orders.css';
 
-const OrdersComponent = () => {
+const Orders = () => {
   const dispatch = useDispatch();
-  const { orders, loading, error } = useSelector((state) => state.orders);
+  const orders = useSelector(selectAllOrders); 
+  const userId = sessionStorage.getItem('UserId');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const isAuthenticated = sessionStorage.getItem('User Id');
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(fetchOrdersById(isAuthenticated));
-    } else {
+    if(userId){
+      dispatch(getOrderById(userId));
+    }else{
       dispatch(fetchOrders());
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, userId]);
 
   const handleFilter = () => {
-    dispatch(fetchOrdersByFilter(startDate, endDate, isAuthenticated ));
-  };
-
-  return (
-    
-    <div style={styles.ordersContainer}>
-      <h2>Orders</h2>
-      <div style={styles.filterContainer}>
-        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        <button onClick={handleFilter}>Filter</button>
-      </div>
-      {loading && <div>Loading...</div>}
-      {error && <div style={styles.errorMessage}>Error: {error}</div>}
-      <ul style={styles.ordersList}>
-        {orders.map((order, index) => (
-          <li key={index} style={styles.orderItem}>
-            <p>ID del Pedido: {order.id}</p>
-            <p>Fecha del Pedido: {order.date}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const styles = {
-  ordersContainer: {
-    maxWidth: '800px',
-    margin: '0 auto',
-  },
-  filterContainer: {
-    marginBottom: '20px',
-  },
-  errorMessage: {
-    color: 'red',
-  },
-  ordersList: {
-    listStyleType: 'none',
-    padding: 0,
-  },
-  orderItem: {
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    marginBottom: '10px',
-    padding: '10px',
-  },
-};
-
-export default OrdersComponent;*/
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAllOrders, fetchOrders  } from '../../stores/orders/ordersSlice';
-
-const OrdersComponent = () => {
-  const dispatch = useDispatch();
-  /*const { orders, loading, error } = useSelector((state) => state.orders);*/
-  const orders = useSelector(selectAllOrders); 
-  console.log(orders);
-  //const orders = useSelector((state) => state.orders);
-  const isAuthenticated = sessionStorage.getItem('User Id');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-
-  useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
-
-  const handleFilter = () => {
-    dispatch(selectAllOrders(startDate, endDate, isAuthenticated));
+    dispatch(fetchOrders(startDate, endDate, userId));
   };
   
   return (
@@ -97,51 +29,42 @@ const OrdersComponent = () => {
       ) : (
         <div className="menu-wrapper">
           {orders.orders && orders.orders.length > 0 ? (
-            <div style={styles.ordersContainer}>
+            <div className='ordersContainer'>
               <h2>Orders</h2>
-              <div style={styles.filterContainer}>
+              <div className="filterContainer">
                 <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                 <button onClick={handleFilter}>Filter</button>
               </div>
-              <ul style={styles.ordersList}>
+              <ul className="ordersList">
                 {orders.orders.map((order) => (
-                  <li key={order.id} style={styles.orderItem}>
-                    <p>ID del Pedido: {order.id}</p>
-                    <p>Fecha del Pedido: {order.date}</p>
+                  <li key={order._id} className="orderItem">
+                    <div className="order-info">
+                      <p>Total price: ${order.totalPrice.toFixed(2)}</p>
+                      <p>Total amount: {order.totalAmount}</p>
+                      <p>Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="order-items">
+                      {Object.entries(order.orderItems).map(([itemName, itemDetails]) => (
+                        <div key={itemName} className="item">
+                          <p className="item-name">{itemDetails.name}</p>
+                          <p className="item-description">{itemDetails.description}</p>
+                          <p className="item-amount">Amount: {itemDetails.amount}</p>
+                          <p>Total price: {order.totalPrice && typeof order.totalPrice === 'number' ? `$${order.totalPrice.toFixed(2)}` : 'N/A'}</p>
+                        </div>
+                      ))}
+                    </div>
                   </li>
                 ))}
               </ul>
             </div>
           ) : (
-            <div>No hay pedidos disponibles</div>
+            <div>No orders available</div>
           )}
         </div>
       )}
     </div>
   );
 }
-const styles = {
-  ordersContainer: {
-    maxWidth: '800px',
-    margin: '0 auto',
-  },
-  filterContainer: {
-    marginBottom: '20px',
-  },
-  errorMessage: {
-    color: 'red',
-  },
-  ordersList: {
-    listStyleType: 'none',
-    padding: 0,
-  },
-  orderItem: {
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    marginBottom: '10px',
-    padding: '10px',
-  },
-};
 
-export default OrdersComponent;
+export default Orders;

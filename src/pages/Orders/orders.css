@@ -1,0 +1,48 @@
+.ordersContainer {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .filterContainer {
+    margin-bottom: 20px;
+  }
+  
+  .ordersList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .orderItem {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+  
+  .order-info {
+    margin-bottom: 20px;
+  }
+  
+  .item {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .item-name {
+    font-weight: bold;
+  }
+  
+  .item-description {
+    color: #555;
+  }
+  
+  .item-amount {
+    font-style: italic;
+  }
+  
+  .item-price {
+    font-weight: bold;
+    color: #007bff; /* Cambia el color según tu preferencia */
+  }

@@ -11,6 +11,11 @@ const userSchema = mongoose.Schema(
         required: true,
         unique: true,
       },
+      sessionId:{
+        type: String,
+        required: true,
+        unique: true,
+      }
     },
     {
       timestamps: true,

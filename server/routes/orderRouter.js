@@ -6,7 +6,7 @@ const router = express.Router();
 // Obtener todas las órdenes
 router.get("/get-orders", async (req, res) => {
   try {
-    const orders = await Order.find({}).populate("user", "name email");
+    const orders = await Order.find({}).populate("sessionId", "name email");
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,7 +16,8 @@ router.get("/get-orders", async (req, res) => {
 // Obtener una orden por su ID
 router.get("/get-order/:id", async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate("user", "name email");
+    console.log(req.params.id);
+    const order = await Order.findOne({ sessionId: req.params.id }).populate("sessionId", "name email");
     if (!order) {
       return res.status(404).json({ message: "Orden no encontrada" });
     }
@@ -29,6 +30,7 @@ router.get("/get-order/:id", async (req, res) => {
 // Crear una nueva orden
 router.post("/create-order", async (req, res) => {
   try {
+    console.log(req.body);
     const order = new Order(req.body);
     const newOrder = await order.save();
     res.status(201).json(newOrder);
@@ -37,12 +39,12 @@ router.post("/create-order", async (req, res) => {
   }
 });
 
-// Ruta para filtrar órdenes por rango de fechas o obtener una orden por su ID
 router.get("/filter-orders", async (req, res) => {
-    try {
+    try {    
+      console.log(req.query);
       // Si se proporciona un ID en la URL, obtén la orden por su ID
       if (req.query.id) {
-        const order = await Order.findById(req.query.id).populate("user", "name email");
+        const order = await Order.findById(req.query.id).populate("sessionId", "name email");
         if (!order) {
           return res.status(404).json({ message: "Orden no encontrada" });
         }
@@ -57,12 +59,12 @@ router.get("/filter-orders", async (req, res) => {
             $lte: new Date(req.query.endDate),
           }
         };
-        const orders = await Order.find(query).populate("user", "name email");
+        const orders = await Order.find(query).populate("sessionId", "name email");
         return res.json(orders);
       }
-  
-      // Si no se proporcionan parámetros, devuelve un error
-      return res.status(400).json({ message: "Debe proporcionar un ID o un rango de fechas" });
+
+      const orders = await Order.find({}).populate("sessionId", "name email");
+      res.json(orders);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

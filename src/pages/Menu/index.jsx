@@ -4,16 +4,18 @@ import { fetchProducts, selectAllProducts } from "../../stores/menu/productsSlic
 import ProductDetailCard from "../../components/ProductDetailCard";
 import { Tabs } from "../../components/Tabs";
 import { addToCart } from "../../stores/cart/cartSlice";
+import { fetchCategories, selectAllCategories } from "../../stores/menu/categoriesSlice";
 
 const Menu = () => {
     const dispatch = useDispatch();
     const products = useSelector(selectAllProducts); 
-    console.log(products.products);
+    const categories = useSelector(selectAllCategories); 
     const [activeTab, setActiveTab] = useState('');
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 
     useEffect(() => {
         dispatch(fetchProducts())
+        dispatch(fetchCategories())
     }, [dispatch])
 
     const onAddProduct = (product) => {
@@ -22,10 +24,7 @@ const Menu = () => {
 
     const onTabSwitch = (newActiveTab) => {
         setActiveTab(newActiveTab);
-        //let categories = products.products.map((product) => product.name.name);
-        let categoriesSet = new Set(products.products.map((product) => product.name.name));
-        let categories = Array.from(categoriesSet);
-        let index = categories.findIndex(category => newActiveTab === category);
+        const index = categories.categories.findIndex(category => category.name === newActiveTab);
         if (index > -1) {
             setActiveTabIndex(index);
         } else {

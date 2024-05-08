@@ -19,13 +19,35 @@ const Register = () => {
     createUserWithEmailAndPassword(authentication, data.email, data.password)
       .then((response) => {
         uid = response.user.uid;
-        sessionStorage.setItem("User Id", uid);
+        sessionStorage.setItem("UserId", uid);
         sessionStorage.setItem(
           "Auth token",
           response._tokenResponse.refreshToken
         );
         window.dispatchEvent(new Event("storage"));
 
+        
+        fetch("http://localhost:8000/api/create-user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            sessionId: uid
+          }),
+        })
+          .then((response) => {
+            if (response.status !== 200) {
+              console.log(response.json());
+            }
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.log(error);
+          });
+  
         setLoading(false);
         toast.success("Account created successfully!🎉", {
           position: "top-right",
@@ -53,43 +75,6 @@ const Register = () => {
         if (error.code === "auth/missing-password") {
           toast.error("Provide a password");
         }
-      });
-
-    fetch("http://localhost:8000/api/create-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email
-      }),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          setLoading(false);
-          toast.success("Account created successfully!🎉", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-
-          setTimeout(() => {
-            navigate("/");
-          }, 2000); 
-
-        } else {
-          console.log(response.json());
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
       });
   };
   return (

@@ -1,15 +1,34 @@
 import { useEffect, useState } from "react";
+import { createOrder   } from '../stores/orders/ordersSlice';
+import { useDispatch } from 'react-redux';
 
 const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"}) => {
     const [printEnabled, setPrintEnabled] = useState(false);
-
+    const dispatch = useDispatch();
     const currentDate = new Date().toLocaleString();
+    
+    const userId = sessionStorage.getItem("UserId");
+    
+    const calculateOrderAmount = (orderItems) => {
+      const initialValue = 0;
+      const totalAmount = orderItems.reduce((previousValue, currentValue) => previousValue + currentValue.amount, initialValue); 
+      return totalAmount;
+  }
+
+  const calculateOrderPrice = (orderItems) => {
+    const initialValue = 0;
+    const itemsPrice = orderItems.reduce((previousValue, currentValue) => {
+      const price = parseFloat(currentValue.price.replace('€', '').replace(',', '.'));
+      return previousValue + price * currentValue.amount;
+  }, initialValue); 
+    return itemsPrice;
+  }
 
     useEffect(() => {
         if (printEnabled) {
             const printTicket = () => {
                 const printWindow = window.open('', '_blank');
-                if (printWindow !== null) { // Verificar si printWindow no es null
+                if (printWindow !== null) { 
                     const content = generatePrintContent(cart);
                     printWindow.document.write(content);
                     printWindow.document.close();
@@ -17,44 +36,30 @@ const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"
                     printWindow.close();
                 }
             };
-        
+            const totalAmount = calculateOrderAmount(cart);
+            const totalPrice = calculateOrderPrice(cart);
+            const simplifiedOrderItems = cart.map(item => ({
+              amount: item.amount,
+              description: item.desciption,
+              name: item.name,
+              price: item.price,
+            }));
+
+            let orderData = {
+              orderItems: simplifiedOrderItems,
+              totalPrice: totalPrice,
+              totalAmount: totalAmount 
+          };
+
+          if (userId) {
+            orderData.sessionId = userId; 
+          }
+            dispatch(createOrder(orderData));
             printTicket();
-            setPrintEnabled(false); // Reset printEnabled state after printing
+            setPrintEnabled(false);
         }
-    }, [printEnabled, cart, title, footer]);   
+    }, [printEnabled]);
  
-
-    
-    /*npm install react-to-print
-
-    import ReactToPrint from "react-to-print";
-    const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024" }) => {
-    const componentRef = useRef();
-
-  return (
-    <div>
-      <ReactToPrint
-        trigger={() => <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Print Ticket</button>}
-        content={() => componentRef.current}
-      />
-      <div ref={componentRef} style={{ display: "none" }}>
-        <div className="ticket">
-          <h1>{title}</h1>
-          {cart.map((product, index) => (
-            <div className="product" key={index}>
-              <p>{product.name}: ${product.price}</p>
-            </div>
-          ))}
-          <div className="footer">
-            <p>{footer}</p>
-            <p>{new Date().toLocaleString()}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-*/
 const generatePrintContent = (cart) => {
   return `
   <html>

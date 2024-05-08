@@ -1,21 +1,28 @@
 import simcafs from "../assets/img/cafeteria.png";
 import cartIcon2 from "../assets/img/web.png";
-
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from 'firebase/auth';
 import Button from "./elements/button";
-import { useEffect, useState } from "react";
 
 export const Header = ({ cartCount }) => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogout = () => {
-        sessionStorage.removeItem('Auth token');
-        sessionStorage.removeItem('User Id');
-        window.dispatchEvent(new Event("storage"))
-        navigate("/");
+        const auth = getAuth();
+        signOut(auth)
+        .then(() => {
+            sessionStorage.removeItem('Auth token');
+            sessionStorage.removeItem('UserId');
+            window.dispatchEvent(new Event("storage"));
+            navigate("/");
+        })
+        .catch((error) => {
+            console.log("noentra");
+            console.error('Error al cerrar sesión:', error);
+        });
     }
 
     useEffect(() => {
@@ -28,6 +35,8 @@ export const Header = ({ cartCount }) => {
             }
         }
 
+        checkAuthToken();
+
         window.addEventListener('storage', checkAuthToken);
 
         return () => {
@@ -35,6 +44,18 @@ export const Header = ({ cartCount }) => {
         }
     }, [])
 
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            sessionStorage.setItem('Reloaded', 'true');
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        }
+    }, [])
     return (
         <nav id="header" className="bg-gray-800 text-white">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">

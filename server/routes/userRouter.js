@@ -5,12 +5,13 @@ const router = express.Router()
 const User = require('../models/userModel')
 
 router.post('/create-user', async (req, res) => {
-    const { name, email } = req.body;
-    console.log('Datos recibidos:', { name, email });
+    const { name, email, sessionId } = req.body;
+    console.log('Datos recibidos:', { name, email, sessionId });
 
     const user = new User({
         name,
         email,
+        sessionId,
         _id: req.body._id,
     });
 

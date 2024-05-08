@@ -15,7 +15,6 @@ export const cartSlice = createSlice({
             return { products: []}
         },
         incrementProductAmount: (state, action) => {
-            console.log('increment');
             return { products: state.products.map(product => product.id === action.payload.id ? {...product, amount: product.amount + 1} : product)}
         },
         decrementProductAmount: (state, action) => {
