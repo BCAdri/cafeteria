@@ -40,20 +40,18 @@ const Orders = () => {
                 {orders.orders.map((order) => (
                   <li key={order._id} className="orderItem">
                     <div className="order-info">
-                      <p>Total price: ${order.totalPrice.toFixed(2)}</p>
-                      <p>Total amount: {order.totalAmount}</p>
-                      <p>Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="order-items">
                       {Object.entries(order.orderItems).map(([itemName, itemDetails]) => (
                         <div key={itemName} className="item">
                           <p className="item-name">{itemDetails.name}</p>
-                          <p className="item-description">{itemDetails.description}</p>
                           <p className="item-amount">Amount: {itemDetails.amount}</p>
-                          <p>Total price: {order.totalPrice && typeof order.totalPrice === 'number' ? `$${order.totalPrice.toFixed(2)}` : 'N/A'}</p>
                         </div>
                       ))}
                     </div>
+                      <p>Total price: ${order.totalPrice.toFixed(2)}</p>
+                      <p>Total amount: {order.totalAmount}</p>
+                      <p>{new Date(order.createdAt).toLocaleString()}</p>
                   </li>
                 ))}
               </ul>

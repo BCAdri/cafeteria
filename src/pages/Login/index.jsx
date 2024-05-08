@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../components/elements/button";
-import { app } from "../../firebase-config";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import { clearCart  } from "../../stores/cart/cartSlice";
 
 const Login = () => {
     let navigate = useNavigate();
+    const dispatch = useDispatch();
     const { register, handleSubmit } = useForm();
     const [loading, setLoading] = useState(false);
 
@@ -18,6 +20,7 @@ const Login = () => {
         let uid = '';
         signInWithEmailAndPassword(authentication, data.email, data.password)
             .then((response) => {
+                dispatch(clearCart());
                 uid = response.user.uid;
                 sessionStorage.setItem('UserId', uid);
                 sessionStorage.setItem('Auth token', response._tokenResponse.refreshToken)

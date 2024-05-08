@@ -8,7 +8,7 @@ const initialState = {
 
 
 export const orderSlice = createSlice({
-  name: 'orders',
+  name: ' ',
     initialState,
     reducers: {},
     extraReducers: (builder) => {

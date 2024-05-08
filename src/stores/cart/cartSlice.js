@@ -9,22 +9,45 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addToCart: (state, action) => {
-            return { products: [...state.products, {...action.payload, amount: 1}]}
+            const existingProductIndex = state.products.findIndex(product => product._id === action.payload._id);
+            if (existingProductIndex !== -1) {              
+                state.products[existingProductIndex].amount += 1;
+                state.products[existingProductIndex].price = (parseFloat(state.products[existingProductIndex].price.replace('€', '')) + parseFloat(action.payload.price.replace('€', ''))).toFixed(2);
+            } else {
+                state.products.push({ ...action.payload, amount: 1 });
+            }
         },
-        clearCart: (state) => {
-            return { products: []}
+        removeFromCart: (state, action) => {
+            state.products = state.products.filter(product => product._id !== action.payload._id);
         },
         incrementProductAmount: (state, action) => {
-            return { products: state.products.map(product => product.id === action.payload.id ? {...product, amount: product.amount + 1} : product)}
+            const product = state.products.find(product => product._id === action.payload._id);
+            const precioIndividual = parseFloat(product.price.replace('€', '')) / product.amount;
+            if (product) {
+                product.amount += 1;
+                product.price = (parseFloat(product.price.replace('€', '')) + precioIndividual).toFixed(2);
+            }
         },
         decrementProductAmount: (state, action) => {
-            return { products: state.products.map(product => product.id === action.payload.id ? {...product, amount: product.amount - 1} : product)}
+            const product = state.products.find(product => product._id === action.payload._id);
+            const precioIndividual = parseFloat(product.price.replace('€', '')) / product.amount;
+
+            if (product) {
+                product.amount -= 1;
+                product.price = (parseFloat(product.price.replace('€', '')) - precioIndividual).toFixed(2);
+                if (product.amount === 0) {
+                    state.products = state.products.filter(product => product._id !== action.payload._id);
+                }
+            }
+        },
+        clearCart: (state) => {
+            state.products = [];
         }
     }
-})
+});
 
 export const cartProducts = state => state.cart.products
 
-export const {  addToCart, clearCart, incrementProductAmount, decrementProductAmount } = cartSlice.actions
+export const {  addToCart, clearCart, incrementProductAmount, decrementProductAmount, removeFromCart } = cartSlice.actions
 
 export default cartSlice.reducer

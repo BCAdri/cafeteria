@@ -5,15 +5,20 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from 'firebase/auth';
 import Button from "./elements/button";
+import { useDispatch } from "react-redux";
+import { clearCart  } from "../stores/cart/cartSlice";
 
 export const Header = ({ cartCount }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogout = () => {
         const auth = getAuth();
         signOut(auth)
         .then(() => {
+            dispatch(clearCart());
             sessionStorage.removeItem('Auth token');
             sessionStorage.removeItem('UserId');
             window.dispatchEvent(new Event("storage"));
