@@ -46,3 +46,44 @@
     font-weight: bold;
     color: #007bff; /* Cambia el color según tu preferencia */
   }
+  .filterContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .inputRow {
+    margin-bottom: 10px;
+  }
+  
+  .inputRow label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .filterButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .filterButton:hover {
+    background-color: #0056b3;
+  } 
+
+  .errorMessageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+  }
+  
+  .noOrdersMessage, .loadingMessage {
+    text-align: center;
+  }
