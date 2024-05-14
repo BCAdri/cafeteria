@@ -66,7 +66,6 @@ export const orderSlice = createSlice({
             throw new Error('Failed to fetch orders');
         }
         const data = await response.json();
-        console.log(data);
         return data;
     });
 
@@ -84,13 +83,11 @@ export const orderSlice = createSlice({
         if (endDate !== undefined && endDate !== '') {
             url += `${url.includes('?') || startDate.trim() !== '' ? '&' : '?'}endDate=${endDate}`;
         }
-        console.log(url);
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Failed to fetch orders');
         }
         const data = await response.json();
-        console.log(data);
         return data;
     });
 
@@ -122,7 +119,6 @@ export const orderSlice = createSlice({
           throw new Error('Failed to fetch orders');
       }
       const data = await response.json();
-      console.log(data);
       return data;
   });
 export const selectAllOrders = state => state.orders;

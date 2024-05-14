@@ -10,6 +10,7 @@ import Cart from "../pages/Cart";
 import { useSelector } from "react-redux";
 import { cartProducts } from "../stores/cart/cartSlice";
 import { Footer } from "../components/Footer";
+import Inventory from "../pages/Inventory";
 
 const Navigation = () => {
     const productsInCart = useSelector(cartProducts);
@@ -24,6 +25,7 @@ const Navigation = () => {
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/inventory" element={<Inventory />} />
             </Routes>
             <Footer />
         </BrowserRouter>

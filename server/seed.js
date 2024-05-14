@@ -19,7 +19,7 @@ async function main() {
         for (let i = 0; i < 10; i+=1) {
             let newProduct = {
                 name: faker.commerce.productName(),
-                desciption: faker.commerce.productDescription(),
+                description: faker.commerce.productDescription(),
                 price: faker.commerce.price({ min: 4, max: 13, symbol: '€' }),
                 category: _.sample(categories),
                 imageUrl: faker.image.url()

@@ -38,9 +38,10 @@ const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"
             };
             const totalAmount = calculateOrderAmount(cart);
             const totalPrice = calculateOrderPrice(cart);
+            
             const simplifiedOrderItems = cart.map(item => ({
               amount: item.amount,
-              description: item.desciption,
+              description: item.description,
               name: item.name,
               price: item.price,
             }));
@@ -58,7 +59,7 @@ const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"
             printTicket();
             setPrintEnabled(false);
         }
-    }, [printEnabled]);
+    }, [printEnabled,cart]);
  
 const generatePrintContent = (cart) => {
   return `

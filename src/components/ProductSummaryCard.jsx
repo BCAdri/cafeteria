@@ -11,7 +11,7 @@ export const ProductsSummaryCard = ({ product }) => {
             </div>
             <div className="product-info">
                 <h3>{product.name}</h3>
-                <p className="text-gray-600">{product.desciption}</p>
+                <p className="text-gray-600">{product.description}</p>
             </div>
             <div className="product-price-qt flex flex-col items-center justify-center">
                 <div className="price">{`${product.price}$`}</div>

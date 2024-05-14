@@ -35,71 +35,72 @@ router.get('/products-by-categories', async(req, res) => {
     } catch (err) {
         res.status(400).send({ error: err})
     }
-})
+});
 
-router.get('/addProducts', async(req, res) => {
+router.post('/addProduct', async (req, res) => {
     try {
-        const product = new Product({
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            category: req.body.category
-        });
+        const { name, description, price, category } = req.body;
+        if (!name || !description || !price || !category) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        }
+
+        const product = new Product({ name, description, price, category });
         await product.save();
         console.log('Producto añadido correctamente:', product);
-        return product;
+        return res.status(201).json(product);
     } catch (error) {
         console.error('Error al añadir producto:', error);
-        throw error;
+        return res.status(500).json({ error: 'Error al añadir producto' });
     }
-})
+});
 
-
-router.get('/deleteProducts', async(req, res) => {
+router.delete('/deleteProduct/:id', async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.body.productId);
+        const { id } = req.params;
+        const product = await Product.findByIdAndDelete(id);
         if (!product) {
             console.log('Producto no encontrado.');
-            return;
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
         console.log('Producto eliminado correctamente:', product);
-        return product;
+        return res.status(200).json(product);
     } catch (error) {
         console.error('Error al eliminar producto:', error);
-        throw error;
+        return res.status(500).json({ error: 'Error al eliminar producto' });
     }
-})
+});
 
-
-router.get('/addCategory', async(req, res) => {
+router.post('/addCategory', async (req, res) => {
     try {
-        const category = new Category({
-            name: req.body.name
-        });
+        const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ error: 'El nombre es obligatorio' });
+        }
+
+        const category = new Category({ name });
         await category.save();
         console.log('Categoría añadida correctamente:', category);
-        return category;
+        return res.status(201).json(category);
     } catch (error) {
         console.error('Error al añadir categoría:', error);
-        throw error;
+        return res.status(500).json({ error: 'Error al añadir categoría' });
     }
-})
+});
 
-
-router.get('/deleteCategory', async(req, res) => {
+router.delete('/deleteCategory/:id', async (req, res) => {
     try {
-        const category = await Category.findByIdAndDelete(req.body.categoryId);
+        const { id } = req.params;
+        const category = await Category.findByIdAndDelete(id);
         if (!category) {
             console.log('Categoría no encontrada.');
-            return;
+            return res.status(404).json({ error: 'Categoría no encontrada' });
         }
         console.log('Categoría eliminada correctamente:', category);
-        return category;
+        return res.status(200).json(category);
     } catch (error) {
         console.error('Error al eliminar categoría:', error);
-        throw error;
+        return res.status(500).json({ error: 'Error al eliminar categoría' });
     }
-})
+});
 
-
-module.exports = router
+module.exports = router;

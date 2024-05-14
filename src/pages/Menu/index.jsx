@@ -12,7 +12,7 @@ const Menu = () => {
     const categories = useSelector(selectAllCategories); 
     const [activeTab, setActiveTab] = useState('');
     const [activeTabIndex, setActiveTabIndex] = useState(0);
-
+    
     useEffect(() => {
         dispatch(fetchProducts())
         dispatch(fetchCategories())
@@ -40,10 +40,10 @@ const Menu = () => {
                 <div className="menu-wrapper">
                     {products.products && products.products.length > 0 ? (
                         <>  
-                            <Tabs
-                                list={Array.from(new Set(products.products.map((product) => product.name.name)))}
-                                activeTab={activeTab}
-                                onTabSwitch={onTabSwitch}
+                           <Tabs
+                            list={categories}
+                            activeTab={activeTab}
+                            onTabSwitch={onTabSwitch}
                             />
                             <div className="flex flex-row mx-3">
                                 {products.products[activeTabIndex].products.map((product, index) => (
