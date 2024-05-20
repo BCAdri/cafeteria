@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TabItem } from "./TabItem";
 
 export const Tabs = ({ list, activeTab, onTabSwitch }) => {
+    console.log(list);
     let active = activeTab === '' ? list.categories[0]._id : activeTab; // Asumo que activeTab debe ser comparado con _id
     const categories = Array.isArray(list.categories) ? list.categories : [];
 

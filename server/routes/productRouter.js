@@ -26,10 +26,10 @@ router.get('/products-by-categories', async(req, res) => {
         const products = await Product.aggregate([
             { $match: {}},
             { $group: {
-                _id: '$category',
+                _id: '$category.name',
                 products: { $push: '$$ROOT'}
             }},
-            { $project: { name: '$_id', products: 1, _id: 0}}
+            { $project: { name: '$name', products: 1, _id: 0}}
         ])
         res.status(200).send({ data: products})
     } catch (err) {

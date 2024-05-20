@@ -52,7 +52,7 @@ export const ProductsPreview = () => {
                   ))}
               </Carousel>
           ) : (
-              <div>No hay productos disponibles</div>
+              <div>There are no products available</div>
           )}
       </div>
   )

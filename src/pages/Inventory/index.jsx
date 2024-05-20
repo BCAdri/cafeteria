@@ -89,18 +89,18 @@ function Inventory() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Productos</h2>
-      <ul className="list-disc list-inside mb-4">
-        {products.map(product => (
-          <li key={product._id} className="flex justify-between items-center p-2 border rounded mb-2">
-            {product.name} - {product.description} - ${product.price} - {product.category}
-            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteProduct(product._id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-2">Añadir Producto</h3>
+    <div className="container mx-auto p-4 flex flex-row">
+      <div className="w-1/2 p-4">
+        <ul className="list-disc list-inside mb-4">
+          <h2 className="text-2xl font-bold mb-4">Products</h2>
+          {products.map(product => (
+            <li key={product._id} className="flex justify-between items-center p-2 border rounded mb-2">
+              {product.name} - {product.description} - ${product.price} - {product.category}
+              <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteProduct(product._id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+        <h3 className="text-xl font-semibold mb-2">Add product</h3>
         <input
           type="text"
           placeholder="Nombre"
@@ -129,20 +129,20 @@ function Inventory() {
           onChange={(e) => setProductCategory(e.target.value)}
           className="w-full p-2 border rounded mb-2"
         />
-        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddProduct}>Añadir Producto</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddProduct}>Add product</button>
       </div>
-
-      <h2 className="text-2xl font-bold mb-4">Categorías</h2>
-      <ul className="list-disc list-inside mb-4">
-        {categories.map(category => (
-          <li key={category._id} className="flex justify-between items-center p-2 border rounded mb-2">
-            {category.name}
-            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteCategory(category._id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Añadir Categoría</h3>
+  
+      <div className="w-1/2 p-4">
+        <ul className="list-disc list-inside mb-4">
+          <h2 className="text-2xl font-bold mb-4">Categories</h2>
+          {categories.map(category => (
+            <li key={category._id} className="flex justify-between items-center p-2 border rounded mb-2">
+              {category.name}
+              <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteCategory(category._id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+        <h3 className="text-xl font-semibold mb-2">Add category</h3>
         <input
           type="text"
           placeholder="Nombre"
@@ -150,7 +150,7 @@ function Inventory() {
           onChange={(e) => setCategoryName(e.target.value)}
           className="w-full p-2 border rounded mb-2"
         />
-        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddCategory}>Añadir Categoría</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddCategory}>Add category</button>
       </div>
     </div>
   );

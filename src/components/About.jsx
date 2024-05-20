@@ -8,15 +8,11 @@ export const About = () => {
                 <div className="">
                     <h2 className="text-2xl font-medium">About Us</h2>
                     <p className="text-lg">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt,
-                    beatae! Doloribus fuga aperiam magni ipsum repellat voluptates
-                    itaque error, atque, exercitationem fugit ab, modi ut voluptatum
-                    sequi ad eum! Rerum! Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Minus quia suscipit deserunt, neque nemo veniam
-                    adipisci deleniti culpa dolor dolores omnis, rem veritatis assumenda
-                    eaque dignissimos ut, nam debitis numquam!
+                    SimCafs offers a web platform designed specifically for the comprehensive management of coffee shops.
+                      With an understanding of the unique demands and complexities of this industry, our team has been dedicated to developing a solution that not only
+                      address immediate operational needs, but also anticipate and adapt to emerging trends in the industry.
                     </p>
-                </div>
+                </div> 
                 <div className="flex items-center justify-center">
                     <img src={aboutImage} alt="" className="w-[400px] h-[400px] object-cover" />
                 </div>

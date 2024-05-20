@@ -42,7 +42,7 @@ const Orders = () => {
         {((startDate && !endDate) || (!startDate && endDate)) && (
           <div className="errorMessageContainer">
             <div className="errorMessage" style={{ color: "red" }}>
-              Por favor seleccione ambas fechas
+            Please select both dates            
             </div>
           </div>
         )}
