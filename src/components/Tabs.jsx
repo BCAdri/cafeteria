@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { TabItem } from "./TabItem";
 
 export const Tabs = ({ list, activeTab, onTabSwitch }) => {
-    console.log(list);
-    let active = activeTab === '' ? list.categories[0]._id : activeTab; // Asumo que activeTab debe ser comparado con _id
     const categories = Array.isArray(list.categories) ? list.categories : [];
 
     return (
@@ -14,13 +11,12 @@ export const Tabs = ({ list, activeTab, onTabSwitch }) => {
                         <TabItem 
                             title={category.name}
                             key={category._id}
-                            index={index}
-                            active={active === category.name}
-                            setActive={onTabSwitch}
+                            active={activeTab === category.name}
+                            setActive={() => onTabSwitch(category.name)}
                         />
-                    )
+                    );
                 })}
             </div>
         </div>
-    )
-}
+    );
+};

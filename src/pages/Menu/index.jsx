@@ -8,67 +8,58 @@ import { fetchCategories, selectAllCategories } from "../../stores/menu/categori
 
 const Menu = () => {
     const dispatch = useDispatch();
-    const products = useSelector(selectAllProducts); 
-    const categories = useSelector(selectAllCategories); 
-    const [activeTab, setActiveTab] = useState('');
-    const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const products = useSelector(selectAllProducts);
+    const categories = useSelector(selectAllCategories);
+    const [activeTabName, setActiveTabName] = useState('');
 
-    console.log(products)
     useEffect(() => {
-        dispatch(fetchProducts())
-        dispatch(fetchCategories())
-    }, [dispatch])
+        dispatch(fetchProducts());
+        dispatch(fetchCategories());
+    }, [dispatch]);
 
     const onAddProduct = (product) => {
-        dispatch(addToCart(product))
-    }
+        dispatch(addToCart(product));
+    };
 
     useEffect(() => {
         if (categories.status === 'fulfilled' && categories.categories.length > 0) {
-            setActiveTab(categories.categories[0].name);
-            setActiveTabIndex(0);
+            setActiveTabName(categories.categories[0].name);
         }
     }, [categories]);
 
-       const onTabSwitch = (newActiveTab) => {
-        setActiveTab(newActiveTab);
-        if (categories.status === 'fulfilled') {
-            const index = categories.categories.findIndex(category => category.name === newActiveTab);
-            if (index > -1) {
-                setActiveTabIndex(index);
-            } else {
-                setActiveTabIndex(0);
-            }
-        }
-    }
+    const onTabSwitch = (newActiveTabName) => {
+        setActiveTabName(newActiveTabName);
+    };
 
+    const filteredProducts = products.products.flatMap(group => 
+        group.products.filter(product => product.category.name === activeTabName)
+    );
     return (
         <div className="bg-white p-4">
             {products.status !== 'fulfilled' || categories.status !== 'fulfilled' ? (
-                <div>Loading...</div>
+                <div className="text-center">Loading...</div>
             ) : (
-                <div className="menu-wrapper">
-                    {products.products && products.products.length > 0 ? (
-                        <>  
-                            <Tabs
-                                list={categories}
-                                activeTab={activeTab}
-                                onTabSwitch={onTabSwitch}
-                            />
+                <>
+                    <Tabs
+                        list={categories}
+                        activeTab={activeTabName}
+                        onTabSwitch={onTabSwitch}
+                    />
+                    <div className="menu-wrapper">
+                        {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                                {products.products[activeTabIndex].products.map((product, index) => (
-                                        <ProductDetailCard key={index} product={product} onAddProduct={onAddProduct}/>
+                                {filteredProducts.map((product) => (
+                                    <ProductDetailCard key={product._id} product={product} onAddProduct={onAddProduct} />
                                 ))}
                             </div>
-                        </>
-                    ) : (
-                        <div>There are no products available</div>
-                    )}
-                </div>
+                        ) : (
+                            <div className="text-center">No products available for this category</div>
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );
-}
-
+};
 
 export default Menu;

@@ -12,10 +12,12 @@ const ProductSchema = new Schema(
         name: { type: String, required: true },
         description: { type: String, required: true },
         price: { type: String, required: true },
-        category: { type: String, required: true },
+        category: { 
+            name: { type: String, required: true }
+        },
+        image: { type: String } 
     }
-)
-
+);
 const Product = mongoose.model('Product', ProductSchema);
 const Category = mongoose.model('Category', CategorySchema);
 

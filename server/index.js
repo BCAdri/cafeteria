@@ -9,22 +9,21 @@ const productRouter = require('./routes/productRouter');
 const userRouter = require('./routes/userRouter');  
 const orderRouter = require('./routes/orderRouter');  
 
-const Order = require('./models/orderModel');
-
 //const env = require('dotenv').config({path: '../.env'});
 
 //const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 var corsOptions = {
-    origin: "http://localhost:3000"
+  origin: "*"
 }
 
+app.use(cors());
 
 //app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' })); // Ajusta el límite según sea necesario
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 app.use(
   express.json({
     verify: function (req, res, buf) {
@@ -35,37 +34,7 @@ app.use(
   })
 );
 
-/*app.post('/webhook', async (req, res) => {
-    let data, eventType;
-  
-    if (process.env.STRIPE_WEBHOOK_SECRET) {
-      let event;
-      let signature = req.headers['stripe-signature'];
-      try {
-        event = stripe.webhooks.constructEvent(
-          req.rawBody,
-          signature,
-          process.env.STRIPE_WEBHOOK_SECRET
-        );
-      } catch (err) {
-        console.log(`⚠️  Webhook signature verification failed.`);
-        return res.sendStatus(400);
-      }
-      data = event.data;
-      eventType = event.type;
-    } else {
-  
-      data = req.body.data;
-      eventType = req.body.type;
-    }
-  
-    if (eventType === 'payment_intent.succeeded') {
-      console.log('💰 Payment captured!');
-    } else if (eventType === 'payment_intent.payment_failed') {
-      console.log('❌ Payment failed.');
-    }
-    res.sendStatus(200);
-  });*/
+app.use('/uploads', express.static('uploads'));
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
@@ -80,42 +49,3 @@ app.listen(PORT, () => {
 app.use('/api/', productRouter);
 app.use('/api/', userRouter);
 app.use('/api/', orderRouter);
-
-/*app.post('/create-payment-intent', async(req, res) => {
-    try {
-        const { orderItems, shippingAddress, userId } = req.body;
-        console.log(shippingAddress);
-
-        const totalPrice = calculateOrderAmount(orderItems);
-
-        const taxPrice = 0;
-        const shippingPrice = 0;
-
-        const order = new Order({
-            orderItems,
-            shippingAddress,
-            paymentMethod: 'stripe',
-            totalPrice,
-            taxPrice,
-            shippingPrice,
-            user: ''
-        })
-
-        // await order.save();
-
-        /*const paymentIntent = await stripe.paymentIntents.create({
-            amount: totalPrice,
-            currency: 'usd'
-        })
-
-        res.send({
-            clientSecret: paymentIntent.client_secret
-        })
-    } catch(e) {
-        res.status(400).json({
-            error: {
-                message: e.message
-            }
-        })
-    }
-})*/

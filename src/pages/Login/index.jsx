@@ -13,7 +13,6 @@ const Login = () => {
     const dispatch = useDispatch();
     const { register, handleSubmit } = useForm();
     const [loading, setLoading] = useState(false);
-
     const onSubmit = (data) => {
         setLoading(true);
         const authentication = getAuth();
@@ -23,39 +22,55 @@ const Login = () => {
                 dispatch(clearCart());
                 uid = response.user.uid;
                 sessionStorage.setItem('UserId', uid);
-                sessionStorage.setItem('Auth token', response._tokenResponse.refreshToken)
-                window.dispatchEvent(new Event("storage"))
-                setLoading(false);
-                toast.success('Successful Login!🎉', {
-                    position: "top-right",
-                    autoClose: 1500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'dark'
+                sessionStorage.setItem('Auth token', response._tokenResponse.refreshToken);
+                window.dispatchEvent(new Event("storage"));
+
+                fetch(`http://108.143.70.6:8000/api/user/${uid}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            return response.json();
+                        } else {
+                            return response.json().then(err => Promise.reject(err));
+                        }
+                    })
+                    .then((userData) => {
+                        sessionStorage.setItem('UserRole', userData.data.role);
+                        setLoading(false);
+                        toast.success('Successful Login!🎉', {
+                            position: "top-right",
+                            autoClose: 1500,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'dark',
+                        });
+                        setTimeout(() => {
+                            navigate("/home");
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        console.log(error);
+                        toast.error(error.error);
                     });
-                    setTimeout(() => {
-                        navigate("/");
-                      }, 2000); 
             })
             .catch((error) => {
                 if (error.code === 'auth/wrong-password') {
-                    toast.error('Wrong Password')
+                    toast.error('Wrong Password');
                 }
                 if (error.code === 'auth/user-not-found') {
-                    toast.error('Email not found, please registe')
+                    toast.error('Email not found, please register');
                 }
                 if (error.code === 'auth/invalid-credential') {
-                    toast.error('Invalid credential')
+                    toast.error('Invalid credential');
                 }
                 setLoading(false);
-            })
-    
-    }
+            });
+    };
     return (
-        <div className="h-screen bg-black flex  items-center justify-center">
+        <div className="h-3/5 bg-black flex  items-center justify-center">
             <div className="rounded-lg max-w-md w-full flex flex-col items-center justify-center relative">
                 <div className="absolute inset-0 transition duration-300 animate-pink blur  gradient bg-gradient-to-tr from-rose-500 to-yellow-500"></div>
                 <div className="p-10 rounded-xl z-10 w-full h-full bg-black">

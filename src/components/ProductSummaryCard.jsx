@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import {incrementProductAmount, decrementProductAmount } from "../stores/cart/cartSlice";
+import simcafs from "../assets/img/cafeteria.png";
 
 export const ProductsSummaryCard = ({ product }) => {
     const dispatch = useDispatch();
@@ -7,7 +8,11 @@ export const ProductsSummaryCard = ({ product }) => {
     return (
         <div className="flex p-1 sm:p-2 border-b border-b-gray-200">
             <div className="product-image mr-2 border border-grey-200 rounded-lg w-full sm:w-1/3">
-                <img src={product.imageUrl} alt={product.name} />
+                {product.image ? (
+                    <img src={`data:image/png;base64,${product.image}`} alt={product.name} />
+                ) : (
+                    <img src={`${simcafs}`} alt="" />
+                )}
             </div>
             <div className="product-info">
                 <h3>{product.name}</h3>

@@ -7,47 +7,79 @@ function Inventory() {
   const [productDescription, setProductDescription] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productCategory, setProductCategory] = useState('');
+  const [productImage, setProductImage] = useState('');
   const [categoryName, setCategoryName] = useState('');
-
+  
   useEffect(() => {
-    fetch('http://localhost:8000/api/categories')
+    fetch('http://108.143.70.6:8000/api/products')
       .then(response => response.json())
-      .then(data => setCategories(data?.data || []))
+      .then(data => {
+        setProducts(data?.data || []);
+      })
       .catch(e => console.log(e));
   }, []);
-
+  
   useEffect(() => {
-    fetch('http://localhost:8000/api/products')
+    fetch('http://108.143.70.6:8000/api/categories')
       .then(response => response.json())
-      .then(data => setProducts(data?.data || []))
+      .then(data => {
+        setCategories(data?.data || []);
+      })
       .catch(e => console.log(e));
   }, []);
 
   const handleAddProduct = () => {
-    if (!productName || !productDescription || !productPrice || !productCategory) {
-      alert('Por favor, rellena todos los campos del producto');
-      return;
+    if (!productName || !productDescription || !productPrice || !productCategory || !productImage) {
+        alert('Por favor, rellena todos los campos del producto');
+        return;
     }
-    fetch('http://localhost:8000/api/addProduct', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name: productName, description: productDescription, price: '€'+productPrice, category: productCategory })
-    })
-      .then(response => response.json())
-      .then(data => {
-        setProducts([...products, data]);
-        setProductName('');
-        setProductDescription('');
-        setProductPrice('');
-        setProductCategory('');
-      })
-      .catch(e => console.log(e));
+
+    const reader = new FileReader();
+    reader.readAsDataURL(productImage);
+    reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1];
+
+        const formData = {
+            name: productName,
+            description: productDescription,
+            price: productPrice,
+            categoryName: productCategory,
+            imageBase64: base64String
+        };
+
+        fetch('http://108.143.70.6::8000/api/addProduct', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                alert('Error al añadir producto');
+                return;
+            }
+
+            const categoryExists = categories.some(category => category.name === productCategory);
+            if (!categoryExists) {
+                setCategories([...categories, { name: productCategory }]);
+            }
+
+            setProducts([...products, data.product]);
+            setProductName('');
+            setProductDescription('');
+            setProductPrice('');
+            setProductCategory('');
+            setProductImage(null);
+        })
+        .catch(e => console.error('Error:', e));
+    };
   };
 
   const handleDeleteProduct = (productId) => {
-    fetch(`http://localhost:8000/api/deleteProduct/${productId}`, {
+    fetch(`http://108.143.70.6:8000/api/deleteProduct/${productId}`, {
       method: 'DELETE'
     })
       .then(response => response.json())
@@ -62,7 +94,7 @@ function Inventory() {
       alert('Por favor, rellena el nombre de la categoría');
       return;
     }
-    fetch('http://localhost:8000/api/addCategory', {
+    fetch('http://108.143.70.6:8000/api/addCategory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -78,7 +110,7 @@ function Inventory() {
   };
 
   const handleDeleteCategory = (categoryId) => {
-    fetch(`http://localhost:8000/api/deleteCategory/${categoryId}`, {
+    fetch(`http://108.143.70.6:8000/api/deleteCategory/${categoryId}`, {
       method: 'DELETE'
     })
       .then(response => response.json())
@@ -95,7 +127,7 @@ function Inventory() {
           <h2 className="text-2xl font-bold mb-4">Products</h2>
           {products.map(product => (
             <li key={product._id} className="flex justify-between items-center p-2 border rounded mb-2">
-              {product.name} - {product.description} - ${product.price} - {product.category}
+              {product.name} - {product.description} - ${product.price} - {product.category && product.category.name}
               <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteProduct(product._id)}>Delete</button>
             </li>
           ))}
@@ -129,6 +161,11 @@ function Inventory() {
           onChange={(e) => setProductCategory(e.target.value)}
           className="w-full p-2 border rounded mb-2"
         />
+        <input
+          type="file"
+          onChange={(e) => setProductImage(e.target.files[0])}
+          className="w-full p-2 border rounded mb-2"
+        />
         <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddProduct}>Add product</button>
       </div>
   
@@ -155,5 +192,4 @@ function Inventory() {
     </div>
   );
 }
-
 export default Inventory;

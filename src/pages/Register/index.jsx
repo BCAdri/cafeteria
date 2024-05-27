@@ -20,69 +20,73 @@ import { clearCart  } from "../../stores/cart/cartSlice";
     const authentication = getAuth();
     let uid = "";
     createUserWithEmailAndPassword(authentication, data.email, data.password)
-      .then((response) => {
-        dispatch(clearCart());
-        uid = response.user.uid;
-        sessionStorage.setItem("UserId", uid);
-        sessionStorage.setItem(
-          "Auth token",
-          response._tokenResponse.refreshToken
-        );
-        window.dispatchEvent(new Event("storage"));
+        .then((response) => {
+            dispatch(clearCart());
+            uid = response.user.uid;
+            sessionStorage.setItem("UserId", uid);
+            sessionStorage.setItem(
+                "Auth token",
+                response._tokenResponse.refreshToken
+            );
+            window.dispatchEvent(new Event("storage"));
 
-        
-        fetch("http://localhost:8000/api/create-user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: data.name,
-            email: data.email,
-            sessionId: uid
-          }),
+            fetch("http://108.143.70.6:8000/api/create-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email,
+                    sessionId: uid,
+                    role: 'worker'  // Rol por defecto
+                }),
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                })
+                .then((userData) => {
+                    sessionStorage.setItem("UserRole", userData.data.role);
+                    setLoading(false);
+                    toast.success("Account created successfully!🎉", {
+                        position: "top-right",
+                        autoClose: 1500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 2000);
+                })
+                .catch((error) => {
+                    setLoading(false);
+                    console.log(error);
+                    toast.error("Error creating account");
+                });
         })
-          .then((response) => {
-            if (response.status !== 200) {
-              console.log(response.json());
-            }
-          })
-          .catch((error) => {
+        .catch((error) => {
             setLoading(false);
-            console.log(error);
-          });
-  
-        setLoading(false);
-        toast.success("Account created successfully!🎉", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
+            if (error.code === "auth/email-already-in-use") {
+                toast.error("Email Already In Use");
+            }
+            if (error.code === "auth/invalid-email") {
+                toast.error("Invalid Email Address");
+            }
+            if (error.code === "auth/missing-password") {
+                toast.error("Provide a password");
+            }
         });
-        setTimeout(() => {
-            navigate("/");
-          }, 2000);
-    })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          toast.error("Email Already In Use");
-        }
-
-        if (error.code === "auth/invalid-email") {
-          toast.error("Invalid Email Address");
-        }
-
-        if (error.code === "auth/missing-password") {
-          toast.error("Provide a password");
-        }
-      });
-  };
+};
   return (
-    <div className="h-screen bg-black flex  items-center justify-center">
+    <div className="h-3/5 bg-black flex  items-center justify-center">
       <div className="rounded-lg max-w-md w-full flex flex-col items-center justify-center relative">
         <div className="absolute inset-0 transition duration-300 animate-pink blur  gradient bg-gradient-to-tr from-rose-500 to-yellow-500"></div>
         <div className="p-10 rounded-xl z-10 w-full h-full bg-black">

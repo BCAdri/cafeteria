@@ -39,20 +39,33 @@ router.get('/products-by-categories', async(req, res) => {
 
 router.post('/addProduct', async (req, res) => {
     try {
-        const { name, description, price, category } = req.body;
-        if (!name || !description || !price || !category) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-        }
-
-        const product = new Product({ name, description, price, category });
-        await product.save();
-        console.log('Producto añadido correctamente:', product);
-        return res.status(201).json(product);
+      const { name, description, price, categoryName, imageBase64  } = req.body;
+  
+      if (!name || !description || !price || !categoryName) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+      }
+  
+      let existingCategory = await Category.findOne({ name: categoryName });
+      if (!existingCategory) {
+        existingCategory = new Category({ name: categoryName });
+        await existingCategory.save();
+      }
+  
+      const newProduct = new Product({ 
+        name, 
+        description, 
+        price, 
+        category: {name: categoryName},
+        image : imageBase64 
+      });
+        await newProduct.save();
+  
+      return res.status(201).json({ product: newProduct });
     } catch (error) {
-        console.error('Error al añadir producto:', error);
-        return res.status(500).json({ error: 'Error al añadir producto' });
+      console.error('Error al añadir producto:', error);
+      return res.status(500).json({ error: 'Error al añadir producto' });
     }
-});
+  });
 
 router.delete('/deleteProduct/:id', async (req, res) => {
     try {

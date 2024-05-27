@@ -11,21 +11,31 @@ import { useSelector } from "react-redux";
 import { cartProducts } from "../stores/cart/cartSlice";
 import { Footer } from "../components/Footer";
 import Inventory from "../pages/Inventory";
+import { useState } from "react";
 
 const Navigation = () => {
     const productsInCart = useSelector(cartProducts);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userRole, setUserRole] = useState(null);
+
+    const isUserAuthenticated = () => {
+        return isLoggedIn; 
+    }
 
     return (
         <BrowserRouter>
-            <Header cartCount={productsInCart ? productsInCart.length : 0}/>
+            <Header cartCount={productsInCart ? productsInCart.length : 0} 
+            isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}
+            userRole={userRole} setUserRole={setUserRole}/>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/menu" element={<Menu />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/login" element={<Login />} />
+                {isUserAuthenticated() && <Route path="/home" element={<Home />} />}
+                {isUserAuthenticated() && <Route path="/cart" element={<Cart />} />}
+                {isUserAuthenticated() && <Route path="/orders" element={<Orders />} />}
+                {isUserAuthenticated() && <Route path="/menu" element={<Menu />} />}
+                {isUserAuthenticated() && userRole === 'admin' && <Route path="/inventory" element={<Inventory />} />}
             </Routes>
             <Footer />
         </BrowserRouter>
