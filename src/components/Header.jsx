@@ -64,9 +64,9 @@ export const Header = ({ cartCount, isLoggedIn, setIsLoggedIn, userRole, setUser
                 </div>
                 <div className="nav-menu-wrapper flex items-center justify-between space-x-10">
                     {isLoggedIn && <Link to="/home" className="text-xl" activeClassName="text-white">Home</Link>}
-                    {isLoggedIn && <Link to="/menu" className="text-xl" activeClassName="text-white">Menu</Link>}
-                    {isLoggedIn && <Link to="/orders" className="text-xl" activeClassName="text-white">Orders</Link>}
-                    {userRole === 'admin' && isLoggedIn && <Link to="/inventory" className="text-xl" activeClassName="text-white">Inventory</Link>}
+                    {isLoggedIn && <Link to="/menu" className="text-xl" activeClassName="text-white">Menú</Link>}
+                    {isLoggedIn && <Link to="/orders" className="text-xl" activeClassName="text-white">Pedidos</Link>}
+                    {userRole === 'admin' && isLoggedIn && <Link to="/inventory" className="text-xl" activeClassName="text-white">Inventario</Link>}
                 </div>
                 <div className="flex items-center justify-center space-x-4">
                     {isLoggedIn && <Link to="/cart" className="mr-4 relative inline-block">

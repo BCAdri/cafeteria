@@ -4,68 +4,68 @@ import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SaveOrderButton = ({ cart }) => {
+
+const SaveOrderButton = ({ cart, isOrderPaid }) => {
   const dispatch = useDispatch();
   const [orderSaved, setOrderSaved] = useState(false);
 
   const userId = sessionStorage.getItem("UserId");
 
   const calculateOrderAmount = (orderItems) => {
-    const initialValue = 0;
-    const totalAmount = orderItems.reduce((previousValue, currentValue) => previousValue + currentValue.amount, initialValue); 
-    return totalAmount;
-}
+      const initialValue = 0;
+      const totalAmount = orderItems.reduce((previousValue, currentValue) => previousValue + currentValue.amount, initialValue); 
+      return totalAmount;
+  }
 
-const calculateOrderPrice = (orderItems) => {
-    console.log(orderItems)
-  const initialValue = 0;
-  const itemsPrice = orderItems.reduce((previousValue, currentValue) => {
-    const price = parseFloat(currentValue.price.replace('€', '').replace(',', '.'));
-    return previousValue + price;
-}, initialValue); 
-console.log(itemsPrice)
+  const calculateOrderPrice = (orderItems) => {
+      const initialValue = 0;
+      const itemsPrice = orderItems.reduce((previousValue, currentValue) => {
+          const price = currentValue.price;
+          return previousValue + price;
+      }, initialValue);
 
-  return itemsPrice;
-}
+      return itemsPrice;
+  }
 
-useEffect(() => {
-    if (orderSaved) {
-      if (cart.length > 0) {
-        const totalAmount = calculateOrderAmount(cart);
-        const totalPrice = calculateOrderPrice(cart);
+  useEffect(() => {
+      if (orderSaved) {
+          if (cart.length > 0) {
+              const totalAmount = calculateOrderAmount(cart);
+              const totalPrice = calculateOrderPrice(cart);
+            console.log(cart);
+              const simplifiedOrderItems = cart.map(item => ({
+                  amount: item.amount,
+                  description: item.description,
+                  name: item.name,
+                  price: item.price,
+              }));
 
-        const simplifiedOrderItems = cart.map(item => ({
-          amount: item.amount,
-          description: item.description,
-          name: item.name,
-          price: item.price,
-        }));
+              let orderData = {
+                  orderItems: simplifiedOrderItems,
+                  totalPrice: totalPrice,
+                  totalAmount: totalAmount,
+                  isPaid: isOrderPaid
+              };
 
-        let orderData = {
-          orderItems: simplifiedOrderItems,
-          totalPrice: totalPrice,
-          totalAmount: totalAmount 
-        };
-
-        if (userId) {
-          orderData.sessionId = userId; 
-        }
-        dispatch(createOrder(orderData));
-        toast.success("Order saved successfully!");
-        setOrderSaved(false); 
+              if (userId) {
+                  orderData.sessionId = userId;
+              }
+              dispatch(createOrder(orderData));
+              toast.success("Pedido guardado correctamente!");
+              setOrderSaved(false);
+          }
       }
-    }
   }, [orderSaved]);
 
   const handleSaveOrder = () => {
-    setOrderSaved(true); 
+      setOrderSaved(true);
   };
 
   return (
-    <div className="flex items-center justify-center mt-4">
-      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleSaveOrder}>Save Order</button>
-      <ToastContainer />
-    </div>
+      <div className="flex items-center justify-center mt-4">
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleSaveOrder}>Guardar pedido</button>
+          <ToastContainer />
+      </div>
   );
 };
 

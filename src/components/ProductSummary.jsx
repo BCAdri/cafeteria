@@ -7,11 +7,11 @@ export const ProductsSummary = () => {
 
     return (
         <div className="flex flex-col h-full overflow-y-auto max-h-96">
-            { cart && cart?.map((product, index) => {
+            {cart && cart.map((product, index) => {
                 return (
                     <ProductsSummaryCard product={product} key={index} />
-                )
+                );
             })}
         </div>
-    )
-}
+    );
+};

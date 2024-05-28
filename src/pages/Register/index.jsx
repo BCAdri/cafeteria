@@ -30,7 +30,7 @@ import { clearCart  } from "../../stores/cart/cartSlice";
             );
             window.dispatchEvent(new Event("storage"));
 
-            fetch("http://108.143.70.6:8000/api/create-user", {
+            fetch("http://localhost:8000/api/create-user", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -52,7 +52,7 @@ import { clearCart  } from "../../stores/cart/cartSlice";
                 .then((userData) => {
                     sessionStorage.setItem("UserRole", userData.data.role);
                     setLoading(false);
-                    toast.success("Account created successfully!🎉", {
+                    toast.success("Cuenta creado correctamente!🎉", {
                         position: "top-right",
                         autoClose: 1500,
                         hideProgressBar: false,
@@ -69,19 +69,19 @@ import { clearCart  } from "../../stores/cart/cartSlice";
                 .catch((error) => {
                     setLoading(false);
                     console.log(error);
-                    toast.error("Error creating account");
+                    toast.error("Error creando la cuenta");
                 });
         })
         .catch((error) => {
             setLoading(false);
             if (error.code === "auth/email-already-in-use") {
-                toast.error("Email Already In Use");
+                toast.error("Email en uso");
             }
             if (error.code === "auth/invalid-email") {
-                toast.error("Invalid Email Address");
+                toast.error("Email no válido");
             }
             if (error.code === "auth/missing-password") {
-                toast.error("Provide a password");
+                toast.error("Proporciona una contraseña");
             }
         });
 };
@@ -134,7 +134,7 @@ import { clearCart  } from "../../stores/cart/cartSlice";
                 className="block appearance-none w-full px-3 py-2 border border-gray-300 roundedn-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-200 focus:border-gray-200"
               />
             </div>
-            <Button size="large">{loading ? "loading" : "Register"}</Button>
+            <Button size="large">{loading ? "Cargando" : "Sign up"}</Button>
           </form>
           <ToastContainer />
         </div>

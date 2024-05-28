@@ -50,6 +50,13 @@ export const orderSlice = createSlice({
             state.status = 'rejected';
             state.error = action.error.message;
         });
+        builder.addCase(updateOrderStatus.fulfilled, (state, action) => {
+            const updatedOrder = action.payload;
+            const existingOrder = state.orders.find(order => order._id === updatedOrder._id);
+            if (existingOrder) {
+              existingOrder.isPaid = updatedOrder.isPaid;
+            }
+          });
       },
     });
     
@@ -121,4 +128,21 @@ export const orderSlice = createSlice({
       const data = await response.json();
       return data;
   });
+
+  export const updateOrderStatus = createAsyncThunk('orders/updateOrderStatus', async ({ id, isPaid }) => {
+    const url = `http://localhost:8000/api/orders/updateOrderStatus/${id}`;
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isPaid }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update order status');
+    }
+    const data = await response.json();
+    return data;
+  });
+  
 export const selectAllOrders = state => state.orders;

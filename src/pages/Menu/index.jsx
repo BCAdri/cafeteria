@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, selectAllProducts } from "../../stores/menu/productsSlice";
 import ProductDetailCard from "../../components/ProductDetailCard";
 import { Tabs } from "../../components/Tabs";
-import { addToCart } from "../../stores/cart/cartSlice";
+import { addToCart, decrementProductAmount } from "../../stores/cart/cartSlice";
 import { fetchCategories, selectAllCategories } from "../../stores/menu/categoriesSlice";
 
 const Menu = () => {
@@ -21,6 +21,9 @@ const Menu = () => {
         dispatch(addToCart(product));
     };
 
+    const onRemoveProduct = (productId) => {
+        dispatch(decrementProductAmount({_id: productId }));
+      };
     useEffect(() => {
         if (categories.status === 'fulfilled' && categories.categories.length > 0) {
             setActiveTabName(categories.categories[0].name);
@@ -37,7 +40,7 @@ const Menu = () => {
     return (
         <div className="bg-white p-4">
             {products.status !== 'fulfilled' || categories.status !== 'fulfilled' ? (
-                <div className="text-center">Loading...</div>
+                <div className="text-center">Cargando...</div>
             ) : (
                 <>
                     <Tabs
@@ -49,11 +52,11 @@ const Menu = () => {
                         {filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                                 {filteredProducts.map((product) => (
-                                    <ProductDetailCard key={product._id} product={product} onAddProduct={onAddProduct} />
+                                    <ProductDetailCard key={product._id} product={product} onAddProduct={onAddProduct} onRemoveProduct={onRemoveProduct}/>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center">No products available for this category</div>
+                            <div className="text-center">No hay productos disponibles para esta categoria.</div>
                         )}
                     </div>
                 </>

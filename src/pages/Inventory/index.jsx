@@ -11,7 +11,7 @@ function Inventory() {
   const [categoryName, setCategoryName] = useState('');
   
   useEffect(() => {
-    fetch('http://108.143.70.6:8000/api/products')
+    fetch('http://localhost:8000/api/products')
       .then(response => response.json())
       .then(data => {
         setProducts(data?.data || []);
@@ -20,7 +20,7 @@ function Inventory() {
   }, []);
   
   useEffect(() => {
-    fetch('http://108.143.70.6:8000/api/categories')
+    fetch('http://localhost:8000/api/categories')
       .then(response => response.json())
       .then(data => {
         setCategories(data?.data || []);
@@ -47,7 +47,7 @@ function Inventory() {
             imageBase64: base64String
         };
 
-        fetch('http://108.143.70.6::8000/api/addProduct', {
+        fetch('http://localhost:8000/api/addProduct', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ function Inventory() {
   };
 
   const handleDeleteProduct = (productId) => {
-    fetch(`http://108.143.70.6:8000/api/deleteProduct/${productId}`, {
+    fetch(`http://localhost:8000/api/deleteProduct/${productId}`, {
       method: 'DELETE'
     })
       .then(response => response.json())
@@ -94,7 +94,7 @@ function Inventory() {
       alert('Por favor, rellena el nombre de la categoría');
       return;
     }
-    fetch('http://108.143.70.6:8000/api/addCategory', {
+    fetch('http://localhost:8000/api/addCategory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ function Inventory() {
   };
 
   const handleDeleteCategory = (categoryId) => {
-    fetch(`http://108.143.70.6:8000/api/deleteCategory/${categoryId}`, {
+    fetch(`http://localhost:8000/api/deleteCategory/${categoryId}`, {
       method: 'DELETE'
     })
       .then(response => response.json())
@@ -124,7 +124,7 @@ function Inventory() {
     <div className="container mx-auto p-4 flex flex-row">
       <div className="w-1/2 p-4">
         <ul className="list-disc list-inside mb-4">
-          <h2 className="text-2xl font-bold mb-4">Products</h2>
+          <h2 className="text-2xl font-bold mb-4">Productos</h2>
           {products.map(product => (
             <li key={product._id} className="flex justify-between items-center p-2 border rounded mb-2">
               {product.name} - {product.description} - ${product.price} - {product.category && product.category.name}
@@ -132,7 +132,7 @@ function Inventory() {
             </li>
           ))}
         </ul>
-        <h3 className="text-xl font-semibold mb-2">Add product</h3>
+        <h3 className="text-xl font-semibold mb-2">Añadir producto</h3>
         <input
           type="text"
           placeholder="Nombre"
@@ -166,20 +166,20 @@ function Inventory() {
           onChange={(e) => setProductImage(e.target.files[0])}
           className="w-full p-2 border rounded mb-2"
         />
-        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddProduct}>Add product</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddProduct}>Añadir producto</button>
       </div>
   
       <div className="w-1/2 p-4">
         <ul className="list-disc list-inside mb-4">
-          <h2 className="text-2xl font-bold mb-4">Categories</h2>
+          <h2 className="text-2xl font-bold mb-4">Categorias</h2>
           {categories.map(category => (
             <li key={category._id} className="flex justify-between items-center p-2 border rounded mb-2">
               {category.name}
-              <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteCategory(category._id)}>Delete</button>
+              <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteCategory(category._id)}>Eliminar</button>
             </li>
           ))}
         </ul>
-        <h3 className="text-xl font-semibold mb-2">Add category</h3>
+        <h3 className="text-xl font-semibold mb-2">Añadir categoria</h3>
         <input
           type="text"
           placeholder="Nombre"
@@ -187,7 +187,7 @@ function Inventory() {
           onChange={(e) => setCategoryName(e.target.value)}
           className="w-full p-2 border rounded mb-2"
         />
-        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddCategory}>Add category</button>
+        <button className="bg-green-500 text-white px-4 py-2 rounded w-full" onClick={handleAddCategory}>Añadir categoria</button>
       </div>
     </div>
   );

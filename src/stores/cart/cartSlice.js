@@ -12,42 +12,48 @@ export const cartSlice = createSlice({
             const existingProductIndex = state.products.findIndex(product => product._id === action.payload._id);
             if (existingProductIndex !== -1) {              
                 state.products[existingProductIndex].amount += 1;
-                state.products[existingProductIndex].price = (parseFloat(state.products[existingProductIndex].price.replace('€', '')) + parseFloat(action.payload.price.replace('€', ''))).toFixed(2);
+                state.products[existingProductIndex].price = state.products[existingProductIndex].price +action.payload.price;
             } else {
                 state.products.push({ ...action.payload, amount: 1 });
             }
         },
         removeFromCart: (state, action) => {
             state.products = state.products.filter(product => product._id !== action.payload._id);
+            console.log(action);
         },
         incrementProductAmount: (state, action) => {
             const product = state.products.find(product => product._id === action.payload._id);
-            const precioIndividual = parseFloat(product.price.replace('€', '')) / product.amount;
+            const precioIndividual =product.price / product.amount;
             if (product) {
                 product.amount += 1;
-                product.price = (parseFloat(product.price.replace('€', '')) + precioIndividual).toFixed(2);
+                product.price = (parseFloat(product.price) + precioIndividual).toFixed(2);
             }
         },
         decrementProductAmount: (state, action) => {
             const product = state.products.find(product => product._id === action.payload._id);
-            const precioIndividual = parseFloat(product.price.replace('€', '')) / product.amount;
-
             if (product) {
-                product.amount -= 1;
-                product.price = (parseFloat(product.price.replace('€', '')) - precioIndividual).toFixed(2);
-                if (product.amount === 0) {
-                    state.products = state.products.filter(product => product._id !== action.payload._id);
-                }
+                if (product.price) {
+                    const precioIndividual = product.price / product.amount;
+                    product.amount -= 1;
+                    product.price = (parseFloat(product.price) - precioIndividual).toFixed(2);
+        
+                    if (product.amount === 0) {
+                        state.products = state.products.filter(product => product._id !== action.payload._id);
+                    }
+                } 
             }
         },
         clearCart: (state) => {
             state.products = [];
+        },
+        toggleOrderPaid: (state) => {
+            state.isPaid = !state.isPaid;
         }
     }
 });
 
 export const cartProducts = state => state.cart.products
 
-export const {  addToCart, clearCart, incrementProductAmount, decrementProductAmount, removeFromCart } = cartSlice.actions
+export const {  addToCart, clearCart, incrementProductAmount, decrementProductAmount, removeFromCart,toggleOrderPaid  } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -25,7 +25,7 @@ const Login = () => {
                 sessionStorage.setItem('Auth token', response._tokenResponse.refreshToken);
                 window.dispatchEvent(new Event("storage"));
 
-                fetch(`http://108.143.70.6:8000/api/user/${uid}`)
+                fetch(`http://localhost:8000/api/user/${uid}`)
                     .then((response) => {
                         if (response.status === 200) {
                             return response.json();
@@ -36,7 +36,7 @@ const Login = () => {
                     .then((userData) => {
                         sessionStorage.setItem('UserRole', userData.data.role);
                         setLoading(false);
-                        toast.success('Successful Login!🎉', {
+                        toast.success('Acceso exitoso!🎉', {
                             position: "top-right",
                             autoClose: 1500,
                             hideProgressBar: false,
@@ -58,13 +58,13 @@ const Login = () => {
             })
             .catch((error) => {
                 if (error.code === 'auth/wrong-password') {
-                    toast.error('Wrong Password');
+                    toast.error('Contraseña incorrecta');
                 }
                 if (error.code === 'auth/user-not-found') {
-                    toast.error('Email not found, please register');
+                    toast.error('Email no encontrado, registrate');
                 }
                 if (error.code === 'auth/invalid-credential') {
-                    toast.error('Invalid credential');
+                    toast.error('Credenciales no válidas');
                 }
                 setLoading(false);
             });
@@ -98,7 +98,7 @@ const Login = () => {
                         className="block appearance-none w-full px-3 py-2 border border-gray-300 roundedn-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-200 focus:border-gray-200"
                         />
                     </div>
-                    <Button size="large">{loading ? "loading" : 'Log'}</Button>
+                    <Button size="large">{loading ? "Cargando" : 'Log'}</Button>
                 </form>
                 <ToastContainer />
                 </div>

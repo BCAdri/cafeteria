@@ -3,7 +3,7 @@ import { ProductPreviewCard } from "./ProductPreviewCard";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useDispatch } from "react-redux";
-import { addToCart } from "../stores/cart/cartSlice";
+import { addToCart,decrementProductAmount } from "../stores/cart/cartSlice";
 
 
 export const ProductsPreview = () => {
@@ -40,19 +40,22 @@ export const ProductsPreview = () => {
     const onAddProduct = (product) => {
         dispatch(addToCart(product))
     }
-    
+    const onRemoveProduct = (productId) => {
+      dispatch(decrementProductAmount({_id: productId }));
+    };
+
     return (
       <div className="container mx-auto pb-4 w-2/3 text-white bg-gray-800">
           {products && products.length > 0 ? (
               <Carousel responsive={responsive}>
                   {products.map((product, index) => (
                       <div className="w-full p-3" key={index}>
-                          <ProductPreviewCard product={product} onAddProduct={onAddProduct} />
+                          <ProductPreviewCard product={product} onAddProduct={onAddProduct} onRemoveProduct={onRemoveProduct} />
                       </div>
                   ))}
               </Carousel>
           ) : (
-              <div className="text-center">There are no products available</div>
+              <div className="text-center">No hay productos disponibles</div>
           )}
       </div>
   )
