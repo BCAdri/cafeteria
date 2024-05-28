@@ -11,27 +11,21 @@ const inventorySlice = createSlice({
   name: 'inventory',
   initialState,
   reducers: {
-    // Acción para agregar un producto
     addProduct(state, action) {
       state.products.push(action.payload);
     },
-    // Acción para eliminar un producto
     deleteProduct(state, action) {
       state.products = state.products.filter(product => product.id !== action.payload);
     },
-    // Acción para agregar una categoría
     addCategory(state, action) {
       state.categories.push(action.payload);
     },
-    // Acción para eliminar una categoría
     deleteCategory(state, action) {
       state.categories = state.categories.filter(category => category.id !== action.payload);
     },
-    // Acción para establecer el estado de carga
     setLoading(state, action) {
       state.loading = action.payload;
     },
-    // Acción para manejar errores
     setError(state, action) {
       state.error = action.payload;
     },

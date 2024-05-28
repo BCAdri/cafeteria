@@ -18,13 +18,6 @@ export const productsSlice = createSlice({
         builder.addCase(fetchProducts.pending, (state, action) => {
             state.status = 'pending'
         })
-        /*builder.addCase(fetchProductsByGategory.fulfilled, (state, action) => {
-            state.status = 'fulfilled'
-            state.products = [...action.payload.data]
-        });
-        builder.addCase(fetchProductsByGategory.pending, (state, action) => {
-            state.status = 'pending'
-        })*/
     }
 })
 
@@ -32,11 +25,6 @@ export const { getProducts } = productsSlice.actions
 
 export default productsSlice.reducer
 
-/*export const fetchProductsByGategory = createAsyncThunk('products/fetchProductsByGategory', async () => {
-    const response = await fetch('http://localhost:8000/api/products-by-categories')
-    const data = await response.json()
-    return data
-})*/
 
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
