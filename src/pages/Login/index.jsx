@@ -21,8 +21,8 @@ const Login = () => {
             .then((response) => {
                 dispatch(clearCart());
                 uid = response.user.uid;
-                sessionStorage.setItem('UserId', uid);
-                sessionStorage.setItem('Auth token', response._tokenResponse.refreshToken);
+                localStorage.setItem('UserId', uid);
+                localStorage.setItem('Auth token', response._tokenResponse.refreshToken);
                 window.dispatchEvent(new Event("storage"));
 
                 fetch(`http://localhost:8000/api/user/${uid}`)
@@ -34,7 +34,7 @@ const Login = () => {
                         }
                     })
                     .then((userData) => {
-                        sessionStorage.setItem('UserRole', userData.data.role);
+                        localStorage.setItem('UserRole', userData.data.role);
                         setLoading(false);
                         toast.success('Acceso exitoso!🎉', {
                             position: "top-right",

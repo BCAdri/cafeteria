@@ -6,7 +6,7 @@ const Orders = () => {
   const dispatch = useDispatch();
   const orders = useSelector(selectAllOrders);
   
-  const userId = sessionStorage.getItem('UserId');
+  const userId = localStorage.getItem('UserId');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   

@@ -10,16 +10,16 @@ export const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action) => {
             const existingProductIndex = state.products.findIndex(product => product._id === action.payload._id);
-            if (existingProductIndex !== -1) {              
+            if (existingProductIndex !== -1) {
                 state.products[existingProductIndex].amount += 1;
-                state.products[existingProductIndex].price = state.products[existingProductIndex].price +action.payload.price;
+                state.products[existingProductIndex].price = parseFloat(state.products[existingProductIndex].price) + parseFloat(action.payload.price);
+                state.products[existingProductIndex].price = state.products[existingProductIndex].price.toFixed(2);
             } else {
-                state.products.push({ ...action.payload, amount: 1 });
+                state.products.push({ ...action.payload, amount: 1, price: parseFloat(action.payload.price).toFixed(2) });
             }
         },
         removeFromCart: (state, action) => {
             state.products = state.products.filter(product => product._id !== action.payload._id);
-            console.log(action);
         },
         incrementProductAmount: (state, action) => {
             const product = state.products.find(product => product._id === action.payload._id);

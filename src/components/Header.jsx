@@ -17,9 +17,9 @@ export const Header = ({ cartCount, isLoggedIn, setIsLoggedIn, userRole, setUser
         signOut(auth)
         .then(() => {
             dispatch(clearCart());
-            sessionStorage.removeItem('Auth token');
-            sessionStorage.removeItem('UserId');
-            sessionStorage.removeItem('UserRole');
+            localStorage.removeItem('Auth token');
+            localStorage.removeItem('UserId');
+            localStorage.removeItem('UserRole');
             setIsLoggedIn(false);
             setUserRole(null);
             window.dispatchEvent(new Event("storage"));
@@ -34,18 +34,18 @@ export const Header = ({ cartCount, isLoggedIn, setIsLoggedIn, userRole, setUser
     onAuthStateChanged(auth, user => {
         if (user) {
             setIsLoggedIn(true);
-            const role = sessionStorage.getItem('UserRole');
+            const role = localStorage.getItem('UserRole');
             setUserRole(role);
         } else {
             setIsLoggedIn(false);
             setUserRole(null);
-        }
-    });
+        }   
+    },);
 
-    useEffect(() => {
+        useEffect(() => {
         const handleBeforeUnload = (event) => {
             event.preventDefault();
-            sessionStorage.setItem('Reloaded', 'true');
+            localStorage.setItem('Reloaded', 'true');
         }
 
         window.addEventListener('beforeunload', handleBeforeUnload);

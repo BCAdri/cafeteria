@@ -9,7 +9,7 @@ const SaveOrderButton = ({ cart, isOrderPaid }) => {
   const dispatch = useDispatch();
   const [orderSaved, setOrderSaved] = useState(false);
 
-  const userId = sessionStorage.getItem("UserId");
+  const userId = localStorage.getItem("UserId");
 
   const calculateOrderAmount = (orderItems) => {
       const initialValue = 0;

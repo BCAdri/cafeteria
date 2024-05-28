@@ -23,8 +23,8 @@ import { clearCart  } from "../../stores/cart/cartSlice";
         .then((response) => {
             dispatch(clearCart());
             uid = response.user.uid;
-            sessionStorage.setItem("UserId", uid);
-            sessionStorage.setItem(
+            localStorage.setItem("UserId", uid);
+            localStorage.setItem(
                 "Auth token",
                 response._tokenResponse.refreshToken
             );
@@ -50,7 +50,7 @@ import { clearCart  } from "../../stores/cart/cartSlice";
                     }
                 })
                 .then((userData) => {
-                    sessionStorage.setItem("UserRole", userData.data.role);
+                    localStorage.setItem("UserRole", userData.data.role);
                     setLoading(false);
                     toast.success("Cuenta creado correctamente!🎉", {
                         position: "top-right",

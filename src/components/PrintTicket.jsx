@@ -24,7 +24,8 @@ const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"
 
     const calculateTotalPrice = (cart) => {
         return cart.reduce((total, product) => {
-            const price = typeof product.price === 'number' ? product.price : 0;
+            console.log(typeof product.price, product.price);
+            const price = parseFloat(product.price);
             return total + price;
         }, 0).toFixed(2);
     };

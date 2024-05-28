@@ -4,7 +4,6 @@ const User = require('../models/userModel');
 
 router.post('/create-user', async (req, res) => {
     const { name, email, sessionId, role } = req.body;
-    console.log('Datos recibidos:', { name, email, sessionId, role });
 
     const user = new User({
         name,

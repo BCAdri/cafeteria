@@ -1,5 +1,4 @@
-
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -11,24 +10,37 @@ import { useSelector } from "react-redux";
 import { cartProducts } from "../stores/cart/cartSlice";
 import { Footer } from "../components/Footer";
 import Inventory from "../pages/Inventory";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Navigation = () => {
     const productsInCart = useSelector(cartProducts);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState(null);
 
+    useEffect(() => {
+        const authToken = localStorage.getItem('Auth token');
+        const userRole = localStorage.getItem('UserRole');
+        if (authToken) {
+            setIsLoggedIn(true);
+            setUserRole(userRole);
+        }
+    }, []);
+
     const isUserAuthenticated = () => {
-        return isLoggedIn; 
+        return isLoggedIn;
     }
 
     return (
         <BrowserRouter>
-            <Header cartCount={productsInCart ? productsInCart.length : 0} 
-            isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}
-            userRole={userRole} setUserRole={setUserRole}/>
+            <Header 
+                cartCount={productsInCart ? productsInCart.length : 0} 
+                isLoggedIn={isLoggedIn} 
+                setIsLoggedIn={setIsLoggedIn} 
+                userRole={userRole} 
+                setUserRole={setUserRole}
+            />
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 {isUserAuthenticated() && <Route path="/home" element={<Home />} />}
