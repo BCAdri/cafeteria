@@ -18,14 +18,26 @@ const SaveOrderButton = ({ cart, isOrderPaid }) => {
   }
 
   const calculateOrderPrice = (orderItems) => {
-      const initialValue = 0;
-      const itemsPrice = orderItems.reduce((previousValue, currentValue) => {
-          const price = currentValue.price;
-          return previousValue + price;
-      }, initialValue);
+    const initialValue = 0;
 
-      return itemsPrice;
-  }
+    const itemsPrice = orderItems.reduce((previousValue, currentValue) => {
+        let price = currentValue.price;
+        if (typeof price === 'string') {
+            price = price.replace(',', '.');
+        }
+        price = parseFloat(price);
+
+        if (isNaN(price)) {
+            console.warn(`Invalid price encountered: ${currentValue.price}`);
+            price = 0;
+        }
+
+        return previousValue + price;
+    }, initialValue);
+
+    console.log(`Total Price Calculated: ${itemsPrice}`);
+    return itemsPrice;
+};
 
   useEffect(() => {
       if (orderSaved) {
@@ -50,6 +62,7 @@ const SaveOrderButton = ({ cart, isOrderPaid }) => {
               if (userId) {
                   orderData.sessionId = userId;
               }
+              console.log(orderData);
               dispatch(createOrder(orderData));
               toast.success("Pedido guardado correctamente!");
               setOrderSaved(false);

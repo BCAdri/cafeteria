@@ -52,7 +52,7 @@ import { clearCart  } from "../../stores/cart/cartSlice";
                 .then((userData) => {
                     localStorage.setItem("UserRole", userData.data.role);
                     setLoading(false);
-                    toast.success("Cuenta creado correctamente!🎉", {
+                    toast.success("Cuenta creada correctamente!🎉", {
                         position: "top-right",
                         autoClose: 1500,
                         hideProgressBar: false,

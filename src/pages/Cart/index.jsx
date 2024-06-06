@@ -33,29 +33,29 @@ const Cart = () => {
         dispatch(toggleOrderPaid());
     };
 
-    return (
-        <div className="bg-white text-black mx-auto mt-2 border border-gray-200 p-4 md:w-2/3 rounded-lg shadow-md sm:p-6 lg:p-8 flex flex-col">
-          <Tabs list={tabs} onTabSwitch={handleTabSwitch} activeTab={currentTab} />
-          <div className={`flex-1 ${currentTab !== 'Summary' ? 'hidden' : ''}`}>
-            <ProductsSummary cart={cart} onRemoveFromCart={handleRemoveFromCart} />
-            <div className="flex justify-between p-2">
-              <Button variant="dark" className="flex items-center me-2" onClick={handleClearCart}>
-                Limpiar carrito
-              </Button>
-              <Button 
-                  style={{ padding: '0.5rem 1rem'}} 
-                  className={`flex items-center me-2 ${isOrderPaid ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 hover:bg-red-700'}`} 
-                  onClick={handleMarkOrderAsPaid}
-              >
-                  {isOrderPaid ? 'Desmarcar Pagado' : 'Marcar como Pagado'}
-              </Button>
-              <SaveOrderButton cart={cart}  isOrderPaid={isOrderPaid} />
-              <PrintTicket cart={cart} isOrderPaid={isOrderPaid}/>
+      return (
+          <div className="bg-white text-black mx-auto mt-2 border border-gray-200 p-4 md:w-2/3 rounded-lg shadow-md sm:p-6 lg:p-8 flex flex-col">
+            <Tabs list={tabs} onTabSwitch={handleTabSwitch} activeTab={currentTab} />
+            <div className={`flex-1 ${currentTab !== 'Summary' ? 'hidden' : ''}`}>
+              <ProductsSummary cart={cart} onRemoveFromCart={handleRemoveFromCart} />
+              <div className="flex justify-between p-2">
+                <Button variant="dark" className="flex items-center me-2" onClick={handleClearCart}>
+                  Limpiar carrito
+                </Button>
+                <Button 
+                    style={{ padding: '0.5rem 1rem'}} 
+                    className={`flex items-center me-2 ${isOrderPaid ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 hover:bg-red-700'}`} 
+                    onClick={handleMarkOrderAsPaid}
+                >
+                    {isOrderPaid ? 'Desmarcar Pagado' : 'Marcar como Pagado'}
+                </Button>
+                <SaveOrderButton cart={cart}  isOrderPaid={isOrderPaid} />
+                <PrintTicket cart={cart} isOrderPaid={isOrderPaid}/>
 
+              </div>
             </div>
           </div>
-        </div>
-      );
-}
+        );
+  }
 
 export default Cart;

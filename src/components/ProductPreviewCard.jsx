@@ -13,17 +13,22 @@ export const ProductPreviewCard = ({ product, onAddProduct, onRemoveProduct }) =
     return (
         <div className="w-full p-4 m-2 rounded text-white bg-gradient-to-b from-slate-600 to-transparent text-center">
             {product.image ? (
-                <img src={`data:image/png;base64,${product.image}`} alt={product.name} />
+                <img 
+                    src={`data:image/png;base64,${product.image}`} 
+                    alt={product.name} 
+                    className="mx-auto w-32 h-32 object-cover rounded-lg"
+                />
             ) : (
-                <div>No image available</div>
+                <div className="mx-auto w-32 h-32 flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg">
+                    No image available
+                </div>
             )}
             <h2 className="pb-2 text-lg">{product.name}</h2>
             <p className="mb-2 h-20 line-clamp-4">{product.description}</p>
             <div className="flex justify-between">
-                <RemoveProduct onRemoveProduct={removeProduct} />
-                <AddProduct onAddProduct={addProduct} />
-            </div>
-
+                    <RemoveProduct onRemoveProduct={removeProduct} />
+                    <AddProduct onAddProduct={addProduct} />
+                </div>
         </div>
-    )
-}
+    );
+    };

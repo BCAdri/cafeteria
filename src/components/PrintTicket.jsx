@@ -62,11 +62,11 @@ const PrintTicket = ({ cart, title = "Ticket de compra", footer = "SimCafs 2024"
                 <h1>${title}</h1>
                 ${cart.map((product, index) => (
                     `<div class="product">
-                        <p>${product.name} - Cantidad: ${product.amount} - Precio: $${product.price / product.amount} - Total: $${product.price}</p>
+                        <p>${product.name} - ${product.price / product.amount}€ x ${product.amount}</p>
                     </div>`
                 )).join('')}
                 <div class="footer">
-                    <p>Precio Total: $${totalPrice}</p>
+                    <p>Precio Total: ${totalPrice}€</p>
                     <p>Estado de Pago: ${isOrderPaid ? 'Pagado' : 'No Pagado'}</p>
                     <p>${footer} - ${currentDate}</p>
                 </div>

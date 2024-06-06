@@ -32,12 +32,10 @@ Log in to your existing account using your credentials.
 If you're a new user, register for an account to access additional features and track your order history.
 
 Technologies Used:
-Frontend: ()
-Backend: ()
-Database: ()
-Authentication: ()
+
 Get Started:
-To get started with the Cafe Management System, simply clone this repository to your local machine and `npm start` (Open [http://localhost:3000](http://localhost:3000) to view it in your browser.).
+To get started with the Cafe Management System, simply clone this repository to your local machine 'npm install' on /cafeteria and /cafeteria/server and `npm start` 
+on /cafeteria and /cafeteria/server (Open [http://localhost:3000](http://localhost:3000) to view it in your browser.).
 
 Thank you for choosing our Cafe Management System. We hope you enjoy your experience!
 

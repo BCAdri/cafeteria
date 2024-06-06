@@ -35,54 +35,17 @@ router.post("/create-order", async (req, res) => {
 });
 
 router.get("/filter-orders", async (req, res) => {
-  try {    
+  try {
+    const { id, startDate, endDate, isPaid } = req.query;
+    const query = {};
 
-    if (req.query.id) {
-      let query = { sessionId: req.query.id };
-      
-      if (req.query.startDate && req.query.endDate) {
-        query.createdAt = {
-          $gte: new Date(req.query.startDate),
-          $lte: new Date(req.query.endDate)
-        };
-      }
+    if (id) query.sessionId = id;
+    if (startDate) query.createdAt = { ...query.createdAt, $gte: new Date(startDate) };
+    if (endDate) query.createdAt = { ...query.createdAt, $lte: new Date(endDate) };
+    if (isPaid !== undefined) query.isPaid = isPaid === 'true';
 
-      const order = await Order.find(query).populate("sessionId", "name email");
-      if (!order) {
-        return res.status(404).json({ message: "Orden no encontrada" });
-      }
-      return res.json(order);
-    }
-  
-    if (req.query.startDate && req.query.endDate) {
-      const query = {
-        createdAt: {
-          $gte: new Date(req.query.startDate),
-          $lte: new Date(req.query.endDate),
-        }
-      };
-      const orders = await Order.find(query).populate("sessionId", "name email");
-      return res.json(orders);
-    } else if (req.query.startDate) {
-      const query = {
-        createdAt: {
-          $gte: new Date(req.query.startDate),
-        }
-      };
-      const orders = await Order.find(query).populate("sessionId", "name email");
-      return res.json(orders);
-    } else if (req.query.endDate) {
-      const query = {
-        createdAt: {
-          $lte: new Date(req.query.endDate),
-        }
-      };
-      const orders = await Order.find(query).populate("sessionId", "name email");
-      return res.json(orders);
-    } else {
-      const orders = await Order.find().populate("sessionId", "name email");
-      return res.json(orders);
-    }
+    const orders = await Order.find(query).populate("sessionId", "name email");
+    res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

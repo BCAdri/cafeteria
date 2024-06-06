@@ -127,7 +127,7 @@ function Inventory() {
           <h2 className="text-2xl font-bold mb-4">Productos</h2>
           {products.map(product => (
             <li key={product._id} className="flex justify-between items-center p-2 border rounded mb-2">
-              {product.name} - {product.description} - ${product.price} - {product.category && product.category.name}
+              {product.name} - {product.description} - {product.price}€ - {product.category && product.category.name}
               <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => handleDeleteProduct(product._id)}>Eliminar</button>
             </li>
           ))}

@@ -7,8 +7,8 @@ const ProductDetailCard = ({ product, onAddProduct, onRemoveProduct }) => {
       <div className="flex flex-col items-center justify-between">
         <h2 className="text-xl font-semibold">{product.name}</h2>
         <p className="text-base text-gray-600 mb-4">{product.description}</p>
-        <div className="flex items-center justify-between w-full">
-          <div className="text-lg text-black font-semibold">${product.price}</div>
+        <div className="flex items-center justify-center w-full">
+          <div className="text-lg text-black font-semibold">{product.price}€</div>
         </div>
       </div>
       <div className="w-full flex items-center justify-center mt-2 mb-1">
@@ -25,5 +25,4 @@ const ProductDetailCard = ({ product, onAddProduct, onRemoveProduct }) => {
     </div>
   );
 };
-
 export default ProductDetailCard;

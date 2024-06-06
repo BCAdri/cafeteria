@@ -76,27 +76,20 @@ export const orderSlice = createSlice({
         return data;
     });
 
-    export const fetchOrders = createAsyncThunk('orders/fetchOrders', async ({ startDate = undefined, endDate = undefined, id = undefined }) => {
-
+    export const fetchOrders = createAsyncThunk('orders/fetchOrders', async ({ startDate, endDate, id, isPaid }) => {
         let url = `http://localhost:8000/api/filter-orders`;
-        if (id !== undefined && id !== '' && id != null) {
-            url += `?id=${id}`;
-        }
-
-        if (startDate !== undefined && startDate !== '') {
-            url += `${url.includes('?') ? '&' : '?'}startDate=${startDate}`;
-        }
-
-        if (endDate !== undefined && endDate !== '') {
-            url += `${url.includes('?') || startDate.trim() !== '' ? '&' : '?'}endDate=${endDate}`;
-        }
-        const response = await fetch(url);
+        const params = new URLSearchParams();
+        if (id) params.append('id', id);
+        if (startDate) params.append('startDate', startDate);
+        if (endDate) params.append('endDate', endDate);
+        if (isPaid !== '') params.append('isPaid', isPaid);
+      
+        const response = await fetch(`${url}?${params.toString()}`);
         if (!response.ok) {
-            throw new Error('Failed to fetch orders');
+          throw new Error('Failed to fetch orders');
         }
-        const data = await response.json();
-        return data;
-    });
+        return await response.json();
+      });
 
     export const createOrder = createAsyncThunk('orders/createOrder', async (orderData) => {
       try {
@@ -144,5 +137,6 @@ export const orderSlice = createSlice({
     const data = await response.json();
     return data;
   });
+  
   
 export const selectAllOrders = state => state.orders;
